@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A16FB009248BBEE30046D1DF /* XzRecordTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB008248BBEE30046D1DF /* XzRecordTableVC.swift */; };
+		A16FB00D248BC8160046D1DF /* XzRoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB00C248BC8160046D1DF /* XzRoundButton.swift */; };
+		A16FB00F248BD9120046D1DF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB00E248BD9120046D1DF /* Utils.swift */; };
+		A16FB011248BD9F20046D1DF /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB010248BD9F20046D1DF /* Const.swift */; };
 		A179166A248B9BF3000710F2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1791669248B9BF3000710F2 /* AppDelegate.swift */; };
 		A1791673248B9BF4000710F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1791672248B9BF4000710F2 /* Assets.xcassets */; };
 		A1791676248B9BF4000710F2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1791674248B9BF4000710F2 /* LaunchScreen.storyboard */; };
@@ -38,6 +42,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A16FB008248BBEE30046D1DF /* XzRecordTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzRecordTableVC.swift; sourceTree = "<group>"; };
+		A16FB00C248BC8160046D1DF /* XzRoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzRoundButton.swift; sourceTree = "<group>"; };
+		A16FB00E248BD9120046D1DF /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		A16FB010248BD9F20046D1DF /* Const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		A1791666248B9BF3000710F2 /* clock-sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "clock-sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1791669248B9BF3000710F2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A1791672248B9BF4000710F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -105,12 +113,15 @@
 		A1791668248B9BF3000710F2 /* clock-sample */ = {
 			isa = PBXGroup;
 			children = (
+				A17916A6248BA2DE000710F2 /* Controls */,
 				A179169B248B9EB5000710F2 /* ViewControllers */,
 				A1791669248B9BF3000710F2 /* AppDelegate.swift */,
 				A1791672248B9BF4000710F2 /* Assets.xcassets */,
 				A1791674248B9BF4000710F2 /* LaunchScreen.storyboard */,
 				A1791677248B9BF4000710F2 /* Info.plist */,
 				A1791699248B9E70000710F2 /* XzMainTabController.swift */,
+				A16FB00E248BD9120046D1DF /* Utils.swift */,
+				A16FB010248BD9F20046D1DF /* Const.swift */,
 			);
 			path = "clock-sample";
 			sourceTree = "<group>";
@@ -136,13 +147,30 @@
 		A179169B248B9EB5000710F2 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A17916A7248BBDCA000710F2 /* Stopwatch */,
 				A179169C248B9EEA000710F2 /* XzWorldClockVC.swift */,
 				A179169E248B9F05000710F2 /* XzAlarmVC.swift */,
 				A17916A0248B9F16000710F2 /* XzBedTimeVC.swift */,
-				A17916A2248B9F22000710F2 /* XzStopwatchVC.swift */,
 				A17916A4248B9F35000710F2 /* XzTimerVC.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		A17916A6248BA2DE000710F2 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				A16FB00C248BC8160046D1DF /* XzRoundButton.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		A17916A7248BBDCA000710F2 /* Stopwatch */ = {
+			isa = PBXGroup;
+			children = (
+				A17916A2248B9F22000710F2 /* XzStopwatchVC.swift */,
+				A16FB008248BBEE30046D1DF /* XzRecordTableVC.swift */,
+			);
+			path = Stopwatch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,10 +306,14 @@
 				A179169D248B9EEA000710F2 /* XzWorldClockVC.swift in Sources */,
 				A179169A248B9E70000710F2 /* XzMainTabController.swift in Sources */,
 				A179169F248B9F05000710F2 /* XzAlarmVC.swift in Sources */,
+				A16FB009248BBEE30046D1DF /* XzRecordTableVC.swift in Sources */,
 				A17916A5248B9F35000710F2 /* XzTimerVC.swift in Sources */,
+				A16FB00F248BD9120046D1DF /* Utils.swift in Sources */,
 				A179166A248B9BF3000710F2 /* AppDelegate.swift in Sources */,
+				A16FB00D248BC8160046D1DF /* XzRoundButton.swift in Sources */,
 				A17916A3248B9F22000710F2 /* XzStopwatchVC.swift in Sources */,
 				A17916A1248B9F16000710F2 /* XzBedTimeVC.swift in Sources */,
+				A16FB011248BD9F20046D1DF /* Const.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
