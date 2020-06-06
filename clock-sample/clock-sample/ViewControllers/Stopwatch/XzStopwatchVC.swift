@@ -39,7 +39,6 @@ class XzStopwatchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.leftButton.addTarget(self, action: #selector(self.btnLeftTouchUpInside), for: .touchDown)
         self.leftButton.addTarget(self, action: #selector(self.btnLeftTouchUpInside), for: .touchUpInside)
         self.rightButton.addTarget(self, action: #selector(self.btnRightTouchUpInside), for: .touchUpInside)
         
@@ -97,10 +96,6 @@ class XzStopwatchVC: UIViewController {
     }
     
     // MARK:- actions
-    
-    @objc private func btnLeftTouchDown(_ sender: UIButton) {
-        
-    }
     
     @objc private func btnLeftTouchUpInside(_ sender: UIButton) {
         
