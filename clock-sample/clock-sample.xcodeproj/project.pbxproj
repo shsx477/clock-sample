@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A16FB009248BBEE30046D1DF /* XzRecordTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB008248BBEE30046D1DF /* XzRecordTableVC.swift */; };
+		A16FB009248BBEE30046D1DF /* XzLapTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB008248BBEE30046D1DF /* XzLapTableVC.swift */; };
 		A16FB00D248BC8160046D1DF /* XzRoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB00C248BC8160046D1DF /* XzRoundButton.swift */; };
 		A16FB00F248BD9120046D1DF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB00E248BD9120046D1DF /* Utils.swift */; };
 		A16FB011248BD9F20046D1DF /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB010248BD9F20046D1DF /* Const.swift */; };
+		A16FB013248CC4300046D1DF /* XzDigitalClockVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB012248CC4300046D1DF /* XzDigitalClockVC.swift */; };
+		A16FB015248CC4750046D1DF /* XzAnalogClockVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB014248CC4750046D1DF /* XzAnalogClockVC.swift */; };
+		A16FB017248CC5810046D1DF /* XzClockPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB016248CC5810046D1DF /* XzClockPageVC.swift */; };
 		A179166A248B9BF3000710F2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1791669248B9BF3000710F2 /* AppDelegate.swift */; };
 		A1791673248B9BF4000710F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1791672248B9BF4000710F2 /* Assets.xcassets */; };
 		A1791676248B9BF4000710F2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1791674248B9BF4000710F2 /* LaunchScreen.storyboard */; };
@@ -22,6 +25,7 @@
 		A17916A1248B9F16000710F2 /* XzBedTimeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17916A0248B9F16000710F2 /* XzBedTimeVC.swift */; };
 		A17916A3248B9F22000710F2 /* XzStopwatchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17916A2248B9F22000710F2 /* XzStopwatchVC.swift */; };
 		A17916A5248B9F35000710F2 /* XzTimerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17916A4248B9F35000710F2 /* XzTimerVC.swift */; };
+		A1CA02D5248D1C3100E88597 /* XzLapTableCellVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CA02D4248D1C3100E88597 /* XzLapTableCellVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,10 +46,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A16FB008248BBEE30046D1DF /* XzRecordTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzRecordTableVC.swift; sourceTree = "<group>"; };
+		A16FB008248BBEE30046D1DF /* XzLapTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzLapTableVC.swift; sourceTree = "<group>"; };
 		A16FB00C248BC8160046D1DF /* XzRoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzRoundButton.swift; sourceTree = "<group>"; };
 		A16FB00E248BD9120046D1DF /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		A16FB010248BD9F20046D1DF /* Const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
+		A16FB012248CC4300046D1DF /* XzDigitalClockVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzDigitalClockVC.swift; sourceTree = "<group>"; };
+		A16FB014248CC4750046D1DF /* XzAnalogClockVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzAnalogClockVC.swift; sourceTree = "<group>"; };
+		A16FB016248CC5810046D1DF /* XzClockPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzClockPageVC.swift; sourceTree = "<group>"; };
 		A1791666248B9BF3000710F2 /* clock-sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "clock-sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1791669248B9BF3000710F2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A1791672248B9BF4000710F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,6 +70,7 @@
 		A17916A0248B9F16000710F2 /* XzBedTimeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzBedTimeVC.swift; sourceTree = "<group>"; };
 		A17916A2248B9F22000710F2 /* XzStopwatchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzStopwatchVC.swift; sourceTree = "<group>"; };
 		A17916A4248B9F35000710F2 /* XzTimerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzTimerVC.swift; sourceTree = "<group>"; };
+		A1CA02D4248D1C3100E88597 /* XzLapTableCellVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzLapTableCellVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +98,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A16FB018248CDAF10046D1DF /* ClockVCs */ = {
+			isa = PBXGroup;
+			children = (
+				A16FB012248CC4300046D1DF /* XzDigitalClockVC.swift */,
+				A16FB014248CC4750046D1DF /* XzAnalogClockVC.swift */,
+			);
+			path = ClockVCs;
+			sourceTree = "<group>";
+		};
 		A179165D248B9BF3000710F2 = {
 			isa = PBXGroup;
 			children = (
@@ -147,7 +164,7 @@
 		A179169B248B9EB5000710F2 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				A17916A7248BBDCA000710F2 /* Stopwatch */,
+				A17916A7248BBDCA000710F2 /* StopwatchVC */,
 				A179169C248B9EEA000710F2 /* XzWorldClockVC.swift */,
 				A179169E248B9F05000710F2 /* XzAlarmVC.swift */,
 				A17916A0248B9F16000710F2 /* XzBedTimeVC.swift */,
@@ -164,13 +181,24 @@
 			path = Controls;
 			sourceTree = "<group>";
 		};
-		A17916A7248BBDCA000710F2 /* Stopwatch */ = {
+		A17916A7248BBDCA000710F2 /* StopwatchVC */ = {
 			isa = PBXGroup;
 			children = (
+				A1CA02D3248D1C1100E88597 /* LapTableVC */,
+				A16FB018248CDAF10046D1DF /* ClockVCs */,
 				A17916A2248B9F22000710F2 /* XzStopwatchVC.swift */,
-				A16FB008248BBEE30046D1DF /* XzRecordTableVC.swift */,
+				A16FB016248CC5810046D1DF /* XzClockPageVC.swift */,
 			);
-			path = Stopwatch;
+			path = StopwatchVC;
+			sourceTree = "<group>";
+		};
+		A1CA02D3248D1C1100E88597 /* LapTableVC */ = {
+			isa = PBXGroup;
+			children = (
+				A16FB008248BBEE30046D1DF /* XzLapTableVC.swift */,
+				A1CA02D4248D1C3100E88597 /* XzLapTableCellVC.swift */,
+			);
+			path = LapTableVC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -306,13 +334,17 @@
 				A179169D248B9EEA000710F2 /* XzWorldClockVC.swift in Sources */,
 				A179169A248B9E70000710F2 /* XzMainTabController.swift in Sources */,
 				A179169F248B9F05000710F2 /* XzAlarmVC.swift in Sources */,
-				A16FB009248BBEE30046D1DF /* XzRecordTableVC.swift in Sources */,
+				A16FB009248BBEE30046D1DF /* XzLapTableVC.swift in Sources */,
+				A16FB017248CC5810046D1DF /* XzClockPageVC.swift in Sources */,
 				A17916A5248B9F35000710F2 /* XzTimerVC.swift in Sources */,
 				A16FB00F248BD9120046D1DF /* Utils.swift in Sources */,
 				A179166A248B9BF3000710F2 /* AppDelegate.swift in Sources */,
 				A16FB00D248BC8160046D1DF /* XzRoundButton.swift in Sources */,
+				A1CA02D5248D1C3100E88597 /* XzLapTableCellVC.swift in Sources */,
 				A17916A3248B9F22000710F2 /* XzStopwatchVC.swift in Sources */,
 				A17916A1248B9F16000710F2 /* XzBedTimeVC.swift in Sources */,
+				A16FB013248CC4300046D1DF /* XzDigitalClockVC.swift in Sources */,
+				A16FB015248CC4750046D1DF /* XzAnalogClockVC.swift in Sources */,
 				A16FB011248BD9F20046D1DF /* Const.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
