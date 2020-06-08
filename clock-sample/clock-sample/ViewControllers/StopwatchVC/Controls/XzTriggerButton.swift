@@ -12,18 +12,18 @@ class XzTriggerButton: XzRoundButton {
     private static var COLOR_STOP_BG_HIGHLIGHTED: UIColor { Const.CUSTOM_RED_1 }
     
     
-    private var isStarted = false
+    private var isWillStart = true
     
-    internal var didStartCallback: TriggerCallbackType?
-    internal var didStopCallback: TriggerCallbackType?
+    internal var doStartCallback: TriggerCallbackType?
+    internal var doStopCallback: TriggerCallbackType?
     
     
     override var isHighlighted: Bool {
         didSet {
             if super.isHighlighted {
-                super.backgroundColor = self.isStarted ? XzTriggerButton.COLOR_STOP_BG_HIGHLIGHTED : XzTriggerButton.COLOR_START_BG_HIGHLIGHTED
+                super.backgroundColor = self.isWillStart ? XzTriggerButton.COLOR_START_BG_HIGHLIGHTED : XzTriggerButton.COLOR_STOP_BG_HIGHLIGHTED
             } else {
-                super.backgroundColor = self.isStarted ? XzTriggerButton.COLOR_STOP_BG : XzTriggerButton.COLOR_START_BG
+                super.backgroundColor = self.isWillStart ? XzTriggerButton.COLOR_START_BG : XzTriggerButton.COLOR_STOP_BG
             }
         }
     }
@@ -33,41 +33,33 @@ class XzTriggerButton: XzRoundButton {
         super.init(frame: CGRect.zero)
         
         super.addTarget(self, action: #selector(self.buttonTouchUpInside), for: .touchUpInside)
-        self.updateState()
+        self.setStateWillStart()
     }
     
     
-    private func updateState() {
-        
-        var title = ""
-        var titleColor = UIColor.white
-        var bg = UIColor.black
-        
-        if self.isStarted {
-            title = "중단"
-            titleColor = XzTriggerButton.COLOR_STOP_TITLE
-            bg = XzTriggerButton.COLOR_STOP_BG
-            
-        } else {
-            title = "시작"
-            titleColor = XzTriggerButton.COLOR_START_TITLE
-            bg = XzTriggerButton.COLOR_START_BG
-        }
-        
-        super.setTitle(title, for: .normal)
-        super.setTitleColor(titleColor, for: .normal)
-        super.backgroundColor = bg
+    private func setStateWillStart() {
+        self.isWillStart = true
+        super.setTitle("시작", for: .normal)
+        super.setTitleColor(XzTriggerButton.COLOR_START_TITLE, for: .normal)
+        super.backgroundColor = XzTriggerButton.COLOR_START_BG
     }
     
+    private func setStateWillStop() {
+        self.isWillStart = false
+        super.setTitle("중단", for: .normal)
+        super.setTitleColor(XzTriggerButton.COLOR_STOP_TITLE, for: .normal)
+        super.backgroundColor = XzTriggerButton.COLOR_STOP_BG
+    }
     
     @objc private func buttonTouchUpInside(_ sender: UIButton) {
-        self.isStarted.toggle()
-        self.updateState()
         
-        if self.isStarted {
-            self.didStartCallback?(self)
+        if self.isWillStart {
+            self.setStateWillStop()
+            self.doStartCallback?(self)
+            
         } else {
-            self.didStopCallback?(self)
+            self.setStateWillStart()
+            self.doStopCallback?(self)
         }
     }
     

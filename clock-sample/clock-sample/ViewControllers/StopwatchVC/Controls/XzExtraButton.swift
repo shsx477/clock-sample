@@ -13,79 +13,57 @@ class XzExtraButton: XzRoundButton {
         didSet {
             if super.isHighlighted {
                 super.backgroundColor = XzExtraButton.COLOR_EXTRA_HIGHLIGHTED_BG
+                
             } else {
-                super.backgroundColor = self.isActivated ? XzExtraButton.COLOR_EXTRA_ACTIVATED_BG : XzExtraButton.COLOR_EXTRA_DEACTIVATED_BG
+                super.backgroundColor = self.curBackground
             }
         }
     }
     
-    private var isTriggerStarted = false
-    private var isActivated = false
+    private var curCallback: extraCallbackType?
+    private var curBackground: UIColor?
     
-    internal var didLapCallback: extraCallbackType?
-    internal var didResetCallback: extraCallbackType?
+    internal var doLapCallback: extraCallbackType?
+    internal var doResetCallback: extraCallbackType?
     
     
     init() {
         super.init(frame: CGRect.zero)
         
+        self.setStateReset()
         super.addTarget(self, action: #selector(self.buttonTouchUpInside), for: .touchUpInside)
-        self.updateState()
     }
     
     
-    private func updateState() {
+    internal func setStateLap() {
+        super.setTitle("랩", for: .normal)
+        super.setTitleColor(XzExtraButton.COLOR_EXTRA_ACTIVATED_TITLE, for: .normal)
+        super.backgroundColor = XzExtraButton.COLOR_EXTRA_ACTIVATED_BG
         
-        var title = ""
-        var titleColor = UIColor.white
-        var bg = UIColor.black
+        self.curBackground = XzExtraButton.COLOR_EXTRA_ACTIVATED_BG
+        self.curCallback = self.doLapCallback
+    }
+    
+    internal func setStatePaused() {
+        super.setTitle("재설정", for: .normal)
+        super.setTitleColor(XzExtraButton.COLOR_EXTRA_ACTIVATED_TITLE, for: .normal)
+        super.backgroundColor = XzExtraButton.COLOR_EXTRA_ACTIVATED_BG
         
-        if self.isActivated {
-            if self.isTriggerStarted {
-                title = "랩"
-                titleColor = XzExtraButton.COLOR_EXTRA_ACTIVATED_TITLE
-                bg = XzExtraButton.COLOR_EXTRA_ACTIVATED_BG
-                
-            } else {
-                title = "재설정"
-                titleColor = XzExtraButton.COLOR_EXTRA_ACTIVATED_TITLE
-                bg = XzExtraButton.COLOR_EXTRA_ACTIVATED_BG
-            }
-        } else {
-            title = "랩"
-            titleColor = XzExtraButton.COLOR_EXTRA_DEACTIVATED_TITLE
-            bg = XzExtraButton.COLOR_EXTRA_DEACTIVATED_BG
-        }
+        self.curBackground = XzExtraButton.COLOR_EXTRA_ACTIVATED_BG
+        self.curCallback = self.doResetCallback
+    }
+    
+    internal func setStateReset() {
+        super.setTitle("랩", for: .normal)
+        super.setTitleColor(XzExtraButton.COLOR_EXTRA_DEACTIVATED_TITLE, for: .normal)
+        super.backgroundColor = XzExtraButton.COLOR_EXTRA_DEACTIVATED_BG
         
-        super.setTitle(title, for: .normal)
-        super.setTitleColor(titleColor, for: .normal)
-        super.backgroundColor = bg
+        self.curBackground = XzExtraButton.COLOR_EXTRA_DEACTIVATED_BG
+        self.curCallback = nil
     }
     
     
-    internal func setTriggerState(isStarted: Bool) {
-        self.isTriggerStarted = isStarted
-        self.isActivated = true
-        
-        self.updateState()
-    }
-    
-    
-    @objc private func buttonTouchUpInside(_ sender: UIButton) {
-        if self.isActivated {
-            
-            if self.isTriggerStarted { // lap
-                self.didLapCallback?(self)
-                
-            } else { // reset
-                self.isActivated = false
-                self.isTriggerStarted = false
-                self.updateState()
-                
-                self.didResetCallback?(self)
-            }
-        }
-    }
+    @objc private func buttonTouchUpInside(_ sender: UIButton) { self.curCallback?(self) }
     
     
     required init?(coder: NSCoder) { fatalError() }

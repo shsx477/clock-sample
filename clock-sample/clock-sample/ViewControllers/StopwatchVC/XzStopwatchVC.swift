@@ -7,8 +7,10 @@ class XzStopwatchVC: UIViewController {
     private let clockPageVC = XzClockPageVC()
     private let buttonView = UIView()
     private let lapTableVC = XzLapTableVC()
-    private let btn_startStop = XzTriggerButton()
+    private let btn_trigger = XzTriggerButton()
     private let btn_extra = XzExtraButton()
+    
+    private var curState = state.reset
     
     
     init() {
@@ -16,11 +18,11 @@ class XzStopwatchVC: UIViewController {
         
         super.tabBarItem = UITabBarItem(title: "스톱워치", image: UIImage(systemName: "stopwatch.fill"), tag: 3)
         
-        self.btn_startStop.didStartCallback = self.didStartTrigger
-        self.btn_startStop.didStopCallback = self.didStopTrigger
+        self.btn_trigger.doStartCallback = self.doStartTrigger
+        self.btn_trigger.doStopCallback = self.doStopTrigger
         
-        self.btn_extra.didLapCallback = self.didLap
-        self.btn_extra.didResetCallback = self.didReset
+        self.btn_extra.doLapCallback = self.doLap
+        self.btn_extra.doResetCallback = self.doReset
     }
     
     required init?(coder: NSCoder) {
@@ -36,20 +38,32 @@ class XzStopwatchVC: UIViewController {
 
     // MARK:- actions
     
-    private func didStartTrigger(_ sender: UIButton) {
-        self.btn_extra.setTriggerState(isStarted: true)
+    private func doStartTrigger(_ sender: UIButton)
+    {
+        self.curState = .running
+        self.btn_extra.setStateLap()
     }
     
-    private func didStopTrigger(_ sender: UIButton) {
-        self.btn_extra.setTriggerState(isStarted: false)
+    private func doStopTrigger(_ sender: UIButton)
+    {
+        self.curState = .paused
+        self.btn_extra.setStatePaused()
     }
     
-    private func didLap(_ sender: UIButton) {
+    private func doLap(_ sender: UIButton) {
         
     }
     
-    private func didReset(_ sender: UIButton) {
-        
+    private func doReset(_ sender: UIButton) {
+        self.curState = .reset
+        self.btn_extra.setStateReset()
+    }
+    
+    
+    private enum state {
+        case running
+        case paused
+        case reset
     }
 }
 
@@ -64,7 +78,7 @@ extension XzStopwatchVC {
         self.clockPageVC.didMove(toParent: self)
 
         self.buttonView.addSubview(self.btn_extra)
-        self.buttonView.addSubview(self.btn_startStop)
+        self.buttonView.addSubview(self.btn_trigger)
         containerView.addSubview(self.buttonView)
         
         containerView.addSubview(self.lapTableVC.view)
@@ -114,7 +128,7 @@ extension XzStopwatchVC {
                 btnL.widthAnchor.constraint(equalTo: btnL.heightAnchor),
             ])
 
-            let btnR = self.btn_startStop
+            let btnR = self.btn_trigger
             btnR.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 btnR.topAnchor.constraint(equalTo: btnView.topAnchor),
