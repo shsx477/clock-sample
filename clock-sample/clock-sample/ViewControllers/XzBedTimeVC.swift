@@ -1,11 +1,3 @@
-//
-//  XzBedTimeVC.swift
-//  clock-sample
-//
-//  Created by 한선수 on 2020/06/06.
-//  Copyright © 2020 한선수. All rights reserved.
-//
-
 import UIKit
 
 class XzBedTimeVC: UIViewController {

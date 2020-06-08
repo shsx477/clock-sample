@@ -1,11 +1,3 @@
-//
-//  XzStopwatchVC.swift
-//  clock-sample
-//
-//  Created by 한선수 on 2020/06/06.
-//  Copyright © 2020 한선수. All rights reserved.
-//
-
 import UIKit
 
 class XzStopwatchVC: UIViewController {
@@ -14,22 +6,21 @@ class XzStopwatchVC: UIViewController {
     
     private let clockPageVC = XzClockPageVC()
     private let buttonView = UIView()
-    private let recordTableVC = XzLapTableVC()
-    private let btn_extra = Utils.createRoundedButton(title: "랩",
-                                                      titleColor: XzStopwatchVC.COLOR_EXTRA_DEACTIVATED_TEXT,
-                                                      backgroundColor: XzStopwatchVC.COLOR_EXTRA_DEACTIVATED_BG,
-                                                      highlightedBackgroundColor: XzStopwatchVC.COLOR_EXTRA_HIGHLIGHTED_BG)
-    
-    private let btn_startStop = Utils.createRoundedButton(title: "시작",
-                                                          titleColor: XzStopwatchVC.COLOR_START_TEXT,
-                                                          backgroundColor: XzStopwatchVC.COLOR_START_BG,
-                                                          highlightedBackgroundColor: XzStopwatchVC.COLOR_START_BG_HIGHLIGHTED)
+    private let lapTableVC = XzLapTableVC()
+    private let btn_startStop = XzTriggerButton()
+    private let btn_extra = XzExtraButton()
     
     
     init() {
         super.init(nibName: nil, bundle: nil)
         
         super.tabBarItem = UITabBarItem(title: "스톱워치", image: UIImage(systemName: "stopwatch.fill"), tag: 3)
+        
+        self.btn_startStop.didStartCallback = self.didStartTrigger
+        self.btn_startStop.didStopCallback = self.didStopTrigger
+        
+        self.btn_extra.didLapCallback = self.didLap
+        self.btn_extra.didResetCallback = self.didReset
     }
     
     required init?(coder: NSCoder) {
@@ -45,34 +36,25 @@ class XzStopwatchVC: UIViewController {
 
     // MARK:- actions
     
-    @objc private func btnLeftTouchUpInside(_ sender: UIButton) {
+    private func didStartTrigger(_ sender: UIButton) {
+        self.btn_extra.setTriggerState(isStarted: true)
+    }
+    
+    private func didStopTrigger(_ sender: UIButton) {
+        self.btn_extra.setTriggerState(isStarted: false)
+    }
+    
+    private func didLap(_ sender: UIButton) {
         
     }
     
-    @objc private func btnRightTouchUpInside(_ sender: UIButton) {
+    private func didReset(_ sender: UIButton) {
         
     }
 }
 
 // MARK:- UI
 extension XzStopwatchVC {
-    private static var COLOR_START_TEXT: UIColor { Const.CUSTOM_GREEN_3 }
-    private static var COLOR_START_BG: UIColor { Const.CUSTOM_GREEN_2 }
-    private static var COLOR_START_BG_HIGHLIGHTED: UIColor { Const.CUSTOM_GREEN_1 }
-
-    private static var COLOR_STOP_TEXT: UIColor { Const.CUSTOM_RED_3 }
-    private static var COLOR_STOP_BG: UIColor { Const.CUSTOM_RED_2 }
-    private static var COLOR_STOP_BG_HIGHLIGHTED: UIColor { Const.CUSTOM_RED_1 }
-    
-    private static var COLOR_EXTRA_ACTIVATED_TEXT: UIColor { UIColor.white }
-    private static var COLOR_EXTRA_ACTIVATED_BG: UIColor { Const.CUSTOM_GRAY_3 }
-    
-    private static var COLOR_EXTRA_DEACTIVATED_TEXT: UIColor { Const.CUSTOM_GRAY_5 }
-    private static var COLOR_EXTRA_DEACTIVATED_BG: UIColor { Const.CUSTOM_GRAY_2 }
-    
-    private static var COLOR_EXTRA_HIGHLIGHTED_BG: UIColor { Const.CUSTOM_GRAY_1 }
-
-    
     private func setUI() {
         let containerView = UIView()
         super.view.addSubview(containerView)
@@ -81,21 +63,19 @@ extension XzStopwatchVC {
         super.addChild(self.clockPageVC)
         self.clockPageVC.didMove(toParent: self)
 
-        self.btn_extra.addTarget(self, action: #selector(self.btnLeftTouchUpInside), for: .touchUpInside)
-        self.btn_startStop.addTarget(self, action: #selector(self.btnRightTouchUpInside), for: .touchUpInside)
         self.buttonView.addSubview(self.btn_extra)
         self.buttonView.addSubview(self.btn_startStop)
         containerView.addSubview(self.buttonView)
         
-        containerView.addSubview(self.recordTableVC.view)
-        super.addChild(self.recordTableVC)
+        containerView.addSubview(self.lapTableVC.view)
+        super.addChild(self.lapTableVC)
         
         self.setConstraint(containerView)
     }
     
     private func setConstraint(_ containerView: UIView) {
 
-        if let tableView = self.recordTableVC.view,
+        if let tableView = self.lapTableVC.view,
             let clockPageView = self.clockPageVC.view {
             
             let space: CGFloat = 20.0
@@ -133,7 +113,7 @@ extension XzStopwatchVC {
                 btnL.bottomAnchor.constraint(equalTo: btnView.bottomAnchor),
                 btnL.widthAnchor.constraint(equalTo: btnL.heightAnchor),
             ])
-            
+
             let btnR = self.btn_startStop
             btnR.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([

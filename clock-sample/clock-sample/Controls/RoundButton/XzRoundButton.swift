@@ -1,21 +1,13 @@
-//
-//  RoundButton.swift
-//  clock-sample
-//
-//  Created by 한선수 on 2020/06/06.
-//  Copyright © 2020 한선수. All rights reserved.
-//
-
 import UIKit
 
 class XzRoundButton: UIButton {
     
     private var tempOriginBackground: UIColor?
-    var highlightBackgroundColor: UIColor?
+    var backgroundHighlightedColor: UIColor?
     
     override var isHighlighted: Bool {
         didSet {
-            if let highlightBg = self.highlightBackgroundColor {
+            if let highlightBg = self.backgroundHighlightedColor {
                 if super.isHighlighted {
                     self.tempOriginBackground = super.backgroundColor
                     super.backgroundColor = highlightBg
@@ -26,21 +18,7 @@ class XzRoundButton: UIButton {
             }
         }
     }
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    convenience init() {
-        self.init(frame: CGRect())
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-    
-    
+
     override func draw(_ rect: CGRect) {
         self.setMask(rect)
         self.addRoundLine(rect)

@@ -1,12 +1,4 @@
-//
-//  clock_sampleTests.swift
-//  clock-sampleTests
-//
-//  Created by 한선수 on 2020/06/06.
-//  Copyright © 2020 한선수. All rights reserved.
-//
-
-import XCTest
+\import XCTest
 @testable import clock_sample
 
 class clock_sampleTests: XCTestCase {

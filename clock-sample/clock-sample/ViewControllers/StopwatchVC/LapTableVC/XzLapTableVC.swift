@@ -1,11 +1,3 @@
-//
-//  XzStopwatchRecordVC.swift
-//  clock-sample
-//
-//  Created by 한선수 on 2020/06/06.
-//  Copyright © 2020 한선수. All rights reserved.
-//
-
 import UIKit
 
 class XzLapTableVC: UITableViewController {
@@ -13,8 +5,12 @@ class XzLapTableVC: UITableViewController {
     private static let COLOR_SEPARATOR = UIColor.systemGray
     
     private var lapTimes = [Date]()
-    
-    
+    private let topSeparator: UIView = {
+        let separator = UIView()
+        separator.backgroundColor = XzLapTableVC.COLOR_SEPARATOR
+        
+        return separator
+    }()
     
     
     override func viewDidLoad() {
@@ -24,12 +20,6 @@ class XzLapTableVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { self.lapTimes.count }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int { 1 }
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        10
-    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: XzLapTableCellVC.CELL_ID, for: indexPath) as! XzLapTableCellVC
@@ -42,15 +32,37 @@ class XzLapTableVC: UITableViewController {
 
 extension XzLapTableVC {
     private func setUI() {
-        super.tableView.backgroundColor = .black
-        super.tableView.separatorColor = XzLapTableVC.COLOR_SEPARATOR
-        super.tableView.separatorInset = UIEdgeInsets.zero
-        super.tableView.register(XzLapTableCellVC.self, forCellReuseIdentifier: XzLapTableCellVC.CELL_ID)
         
-        let topSeparator = UIView()
-        topSeparator.backgroundColor = XzLapTableVC.COLOR_SEPARATOR
-        topSeparator.frame.size = CGSize(width: 0, height: 1 / UIScreen.main.scale)
-        super.tableView.tableHeaderView = topSeparator
+        if let table = super.tableView {
+            // tableview
+            table.backgroundColor = .black
+            table.separatorColor = XzLapTableVC.COLOR_SEPARATOR
+            table.separatorInset = UIEdgeInsets.zero
+            table.register(XzLapTableCellVC.self, forCellReuseIdentifier: XzLapTableCellVC.CELL_ID)
+            
+            // top separator
+            table.tableHeaderView = self.topSeparator
+            
+            self.setConstraint()
+        }
+    }
+    
+    private func setConstraint() {
+        
+        if let table = super.tableView {
+            let separator = self.topSeparator
+            let contentGuide = table.contentLayoutGuide
+            let frameGuide = table.frameLayoutGuide
+            
+            separator.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                separator.topAnchor.constraint(greaterThanOrEqualTo: contentGuide.topAnchor),
+                separator.topAnchor.constraint(greaterThanOrEqualTo: frameGuide.topAnchor),
+                separator.centerXAnchor.constraint(equalTo: table.centerXAnchor),
+                separator.widthAnchor.constraint(equalTo: table.widthAnchor),
+                separator.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale),
+            ])
+        }
     }
 }
 
