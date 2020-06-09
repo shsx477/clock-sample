@@ -17,10 +17,6 @@ class XzLapTableCellVC: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-    
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -37,4 +33,7 @@ class XzLapTableCellVC: UITableViewCell {
             lb.trailingAnchor.constraint(equalTo: super.contentView.trailingAnchor, constant: 20),
         ])
     }
+    
+    
+    required init?(coder: NSCoder) { fatalError() }
 }

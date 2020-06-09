@@ -2,16 +2,19 @@ import UIKit
 
 class XzClockPageVC: UIPageViewController {
     
-    private let clockPageVCs = [XzDigitalClockVC(), XzAnalogClockVC()]
+    private let digitalClockVC: XzClockDigitalVC
+    private let analogClockVC: XzClockAnalogVC
+    private let clockPageVCs: [UIViewController]
     
     
     init() {
+        self.analogClockVC = XzClockAnalogVC()
+        self.digitalClockVC = XzClockDigitalVC()
+        self.clockPageVCs = [self.digitalClockVC, self.analogClockVC]
+        
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +24,26 @@ class XzClockPageVC: UIPageViewController {
         super.dataSource = self
         super.setViewControllers([self.clockPageVCs[0]], direction: .forward, animated: true)
     }
+    
+    
+    internal func start() {
+        
+    }
+    
+    internal func stop() {
+        
+    }
+    
+    internal func reset() {
+        self.digitalClockVC.reset()
+    }
+    
+    internal func updateTime(time: String) {
+        self.digitalClockVC.updateTime(time: time)
+    }
+    
+    
+    required init?(coder: NSCoder) { fatalError() }
 }
 
 extension XzClockPageVC: UIPageViewControllerDataSource {

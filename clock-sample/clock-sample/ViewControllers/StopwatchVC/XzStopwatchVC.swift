@@ -10,7 +10,17 @@ class XzStopwatchVC: UIViewController {
     private let btn_trigger = XzTriggerButton()
     private let btn_extra = XzExtraButton()
     
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "mm:ss.SS"
+        return formatter
+    }()
+    
     private var curState = state.reset
+    private var stopwatchTimer: Timer?
+    private var curBeginTime: Date?
+    private var oldElapsedSec: Double = 0.0     // 마지막 경과초 (마지막에 중단했을 때 초)
+    private var nowElapsedSec: Double = 0.0     // 현재 실시간 초
     
     
     init() {
@@ -25,10 +35,6 @@ class XzStopwatchVC: UIViewController {
         self.btn_extra.doResetCallback = self.doReset
     }
     
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,16 +42,40 @@ class XzStopwatchVC: UIViewController {
         self.setUI()
     }
 
+    
+    private func timerBlock(timer: Timer) {
+        if let beginTime = self.curBeginTime {
+            self.nowElapsedSec = Date().timeIntervalSince(beginTime) + self.oldElapsedSec
+            let time = Date(timeIntervalSince1970: self.nowElapsedSec)
+            let timeText = self.dateFormatter.string(from: time)
+            
+            self.clockPageVC.updateTime(time: timeText)
+        }
+    }
+    
     // MARK:- actions
     
     private func doStartTrigger(_ sender: UIButton)
     {
         self.curState = .running
         self.btn_extra.setStateLap()
+        
+        self.curBeginTime = Date()
+        self.clockPageVC.start()
+        
+        let newTimer = Timer(timeInterval: 0.01, repeats: true, block: self.timerBlock(timer:))
+        self.stopwatchTimer = newTimer
+        RunLoop.current.add(newTimer, forMode: .common)
     }
     
     private func doStopTrigger(_ sender: UIButton)
     {
+        self.stopwatchTimer?.invalidate()
+        self.stopwatchTimer = nil
+        self.oldElapsedSec = self.nowElapsedSec
+        
+        self.clockPageVC.stop()
+        
         self.curState = .paused
         self.btn_extra.setStatePaused()
     }
@@ -57,6 +87,12 @@ class XzStopwatchVC: UIViewController {
     private func doReset(_ sender: UIButton) {
         self.curState = .reset
         self.btn_extra.setStateReset()
+        
+        self.oldElapsedSec = 0.0
+        self.nowElapsedSec = 0.0
+        self.curBeginTime = nil
+        
+        self.clockPageVC.reset()
     }
     
     
@@ -65,6 +101,8 @@ class XzStopwatchVC: UIViewController {
         case paused
         case reset
     }
+    
+    required init?(coder: NSCoder) { fatalError() }
 }
 
 // MARK:- UI

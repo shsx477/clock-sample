@@ -1,6 +1,6 @@
 import UIKit
 
-class XzAnalogClockVC: UIViewController {
+class XzClockAnalogVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,5 +17,18 @@ class XzAnalogClockVC: UIViewController {
             lb.centerXAnchor.constraint(equalTo: super.view.centerXAnchor),
             lb.centerYAnchor.constraint(equalTo: super.view.centerYAnchor),
         ])
+    }
+    
+    
+    internal func start() {
+        
+    }
+    
+    internal func stop() {
+        
+    }
+    
+    internal func reset() {
+        
     }
 }
