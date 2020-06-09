@@ -1,9 +1,7 @@
 import UIKit
 
 class XzClockDigitalVC: UIViewController {
-    
-    private static let INIT_TIME = "00:00.00"
-    
+
     private let lb_clock = UILabel()
     
     
@@ -11,7 +9,7 @@ class XzClockDigitalVC: UIViewController {
         super.viewDidLoad()
         
         let lb = self.lb_clock
-        lb.text = XzClockDigitalVC.INIT_TIME
+        lb.text = XzStopwatchVC.INIT_TIME
         lb.textColor = .white
         lb.textAlignment = .center
         lb.adjustsFontSizeToFitWidth = true
@@ -30,19 +28,11 @@ class XzClockDigitalVC: UIViewController {
     }
     
     
-    internal func updateTime(time: String) {
-        self.lb_clock.text = time
+    internal func updateTime(elapsedSec: TimeInterval) {
+        self.lb_clock.text = XzStopwatchVC.toString(date: Date(timeIntervalSince1970: elapsedSec))
     }
-    
-    internal func start() {
-        
-    }
-    
-    internal func stop() {
-        
-    }
-    
+
     internal func reset() {
-        self.lb_clock.text = XzClockDigitalVC.INIT_TIME
+        self.lb_clock.text = XzStopwatchVC.INIT_TIME
     }
 }

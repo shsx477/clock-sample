@@ -1,7 +1,6 @@
 import UIKit
 
 class XzStopwatchVC: UIViewController {
-    
     private let btnMargin: CGFloat = 20
     
     private let clockPageVC = XzClockPageVC()
@@ -10,17 +9,12 @@ class XzStopwatchVC: UIViewController {
     private let btn_trigger = XzTriggerButton()
     private let btn_extra = XzExtraButton()
     
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "mm:ss.SS"
-        return formatter
-    }()
     
     private var curState = state.reset
     private var stopwatchTimer: Timer?
     private var curBeginTime: Date?
-    private var oldElapsedSec: Double = 0.0     // 마지막 경과초 (마지막에 중단했을 때 초)
-    private var nowElapsedSec: Double = 0.0     // 현재 실시간 초
+    private var oldElapsedSec = 0.0     // 마지막 경과초 (마지막에 중단했을 때 초)
+    private var nowElapsedSec = 0.0     // 현재 실시간 초
     
     
     init() {
@@ -46,10 +40,9 @@ class XzStopwatchVC: UIViewController {
     private func timerBlock(timer: Timer) {
         if let beginTime = self.curBeginTime {
             self.nowElapsedSec = Date().timeIntervalSince(beginTime) + self.oldElapsedSec
-            let time = Date(timeIntervalSince1970: self.nowElapsedSec)
-            let timeText = self.dateFormatter.string(from: time)
-            
-            self.clockPageVC.updateTime(time: timeText)
+
+            self.clockPageVC.updateTime(elapsedSec: self.nowElapsedSec)
+            self.lapTableVC.updateTime(elapsedSec: self.nowElapsedSec)
         }
     }
     
@@ -60,8 +53,11 @@ class XzStopwatchVC: UIViewController {
         self.curState = .running
         self.btn_extra.setStateLap()
         
-        self.curBeginTime = Date()
+        let nowTime = Date()
+        self.curBeginTime = nowTime
+        
         self.clockPageVC.start()
+        self.lapTableVC.start()
         
         let newTimer = Timer(timeInterval: 0.01, repeats: true, block: self.timerBlock(timer:))
         self.stopwatchTimer = newTimer
@@ -81,7 +77,7 @@ class XzStopwatchVC: UIViewController {
     }
     
     private func doLap(_ sender: UIButton) {
-        
+        self.lapTableVC.lap(elapsedSec: self.nowElapsedSec)
     }
     
     private func doReset(_ sender: UIButton) {
@@ -93,6 +89,7 @@ class XzStopwatchVC: UIViewController {
         self.curBeginTime = nil
         
         self.clockPageVC.reset()
+        self.lapTableVC.reset()
     }
     
     
@@ -103,6 +100,21 @@ class XzStopwatchVC: UIViewController {
     }
     
     required init?(coder: NSCoder) { fatalError() }
+}
+
+// MARK:- Static
+extension XzStopwatchVC {
+    
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "mm:ss.SS"
+        return formatter
+    }()
+    
+    internal static let INIT_TIME = "00:00.00"
+    
+    
+    internal class func toString(date: Date) -> String { XzStopwatchVC.dateFormatter.string(from: date) }
 }
 
 // MARK:- UI
@@ -145,7 +157,7 @@ extension XzStopwatchVC {
                 tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 tableView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-                tableView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.37)
+                tableView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.38)
             ])
             
             let btnView = self.buttonView

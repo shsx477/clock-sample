@@ -38,8 +38,8 @@ class XzClockPageVC: UIPageViewController {
         self.digitalClockVC.reset()
     }
     
-    internal func updateTime(time: String) {
-        self.digitalClockVC.updateTime(time: time)
+    internal func updateTime(elapsedSec: TimeInterval) {
+        self.digitalClockVC.updateTime(elapsedSec: elapsedSec)
     }
     
     

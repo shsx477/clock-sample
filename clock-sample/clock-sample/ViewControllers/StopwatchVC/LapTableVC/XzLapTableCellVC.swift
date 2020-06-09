@@ -2,11 +2,12 @@ import UIKit
 
 class XzLapTableCellVC: UITableViewCell {
     
+    private static let CELL_FONTSIZE: CGFloat = 18
     internal static let CELL_ID = UUID().uuidString
     
-    private let lb_lapTime: UILabel = {
+    internal let lb_lapTime: UILabel = {
         let lb = UILabel()
-        lb.font = UIFont.systemFont(ofSize: 20)
+        lb.font = UIFont.monospacedDigitSystemFont(ofSize: XzLapTableCellVC.CELL_FONTSIZE, weight: .regular)
         lb.textColor = Const.COLOR_TEXT_DEFAULT
         
         return lb
@@ -15,22 +16,29 @@ class XzLapTableCellVC: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-    
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
         
         super.backgroundColor = .clear
-        super.textLabel?.textColor = Const.COLOR_TEXT_DEFAULT
         
+        let containerView = super.contentView
+        
+        if let lb_title = super.textLabel {
+            lb_title.font = UIFont.systemFont(ofSize: XzLapTableCellVC.CELL_FONTSIZE)
+            lb_title.textColor = Const.COLOR_TEXT_DEFAULT
+            
+            lb_title.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                lb_title.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+                lb_title.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            ])
+        }
+
         super.contentView.addSubview(self.lb_lapTime)
         
-        let lb = self.lb_lapTime
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        let lb_lap = self.lb_lapTime
+        lb_lap.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            lb.centerYAnchor.constraint(equalTo: super.contentView.centerYAnchor),
-            lb.trailingAnchor.constraint(equalTo: super.contentView.trailingAnchor, constant: 20),
+            lb_lap.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            lb_lap.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
         ])
     }
     
