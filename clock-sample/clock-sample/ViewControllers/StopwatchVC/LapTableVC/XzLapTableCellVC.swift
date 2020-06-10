@@ -8,7 +8,7 @@ class XzLapTableCellVC: UITableViewCell {
     internal let lb_lapTime: UILabel = {
         let lb = UILabel()
         lb.font = UIFont.monospacedDigitSystemFont(ofSize: XzLapTableCellVC.CELL_FONTSIZE, weight: .regular)
-        lb.textColor = Const.COLOR_TEXT_DEFAULT
+        lb.textColor = ConstColor.COLOR_TEXT_DEFAULT
         
         return lb
     }()
@@ -23,7 +23,7 @@ class XzLapTableCellVC: UITableViewCell {
         
         if let lb_title = super.textLabel {
             lb_title.font = UIFont.systemFont(ofSize: XzLapTableCellVC.CELL_FONTSIZE)
-            lb_title.textColor = Const.COLOR_TEXT_DEFAULT
+            lb_title.textColor = ConstColor.COLOR_TEXT_DEFAULT
             
             lb_title.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([

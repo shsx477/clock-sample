@@ -4,12 +4,12 @@ class XzTriggerButton: XzRoundButton {
     
     typealias TriggerCallbackType = (UIButton) -> Void
 
-    private static var COLOR_START_TITLE: UIColor { Const.CUSTOM_GREEN_3 }
-    private static var COLOR_START_BG: UIColor { Const.CUSTOM_GREEN_2 }
-    private static var COLOR_START_BG_HIGHLIGHTED: UIColor { Const.CUSTOM_GREEN_1 }
-    private static var COLOR_STOP_TITLE: UIColor { Const.CUSTOM_RED_3 }
-    private static var COLOR_STOP_BG: UIColor { Const.CUSTOM_RED_2 }
-    private static var COLOR_STOP_BG_HIGHLIGHTED: UIColor { Const.CUSTOM_RED_1 }
+    private static var COLOR_START_TITLE: UIColor { ConstColor.CUSTOM_GREEN_3 }
+    private static var COLOR_START_BG: UIColor { ConstColor.CUSTOM_GREEN_2 }
+    private static var COLOR_START_BG_HIGHLIGHTED: UIColor { ConstColor.CUSTOM_GREEN_1 }
+    private static var COLOR_STOP_TITLE: UIColor { ConstColor.CUSTOM_RED_3 }
+    private static var COLOR_STOP_BG: UIColor { ConstColor.CUSTOM_RED_2 }
+    private static var COLOR_STOP_BG_HIGHLIGHTED: UIColor { ConstColor.CUSTOM_RED_1 }
     
     
     private var isWillStart = true

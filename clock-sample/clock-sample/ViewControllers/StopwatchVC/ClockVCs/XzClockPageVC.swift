@@ -1,6 +1,7 @@
 import UIKit
 
 class XzClockPageVC: UIPageViewController {
+    internal static let pageControlHeight: CGFloat = 37.0
     
     private let digitalClockVC: XzClockDigitalVC
     private let analogClockVC: XzClockAnalogVC

@@ -1,21 +1,30 @@
 import UIKit
 
 class XzClockAnalogVC: UIViewController {
+
+    private let analogClockView = XzClockAnalogView()
+    
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let clock = self.analogClockView
+        super.view.addSubview(clock)
         
-        let lb = UILabel()
-        lb.text = "Analog Clock"
-        lb.textColor = .white
-        lb.font = UIFont.systemFont(ofSize: 30)
-        
-        super.view.addSubview(lb)
-        
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        let safeArea = super.view.safeAreaLayoutGuide
+        clock.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            lb.centerXAnchor.constraint(equalTo: super.view.centerXAnchor),
-            lb.centerYAnchor.constraint(equalTo: super.view.centerYAnchor),
+            clock.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            clock.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            clock.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            clock.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
         ])
     }
     
@@ -31,4 +40,7 @@ class XzClockAnalogVC: UIViewController {
     internal func reset() {
         
     }
+    
+    
+    required init?(coder: NSCoder) { fatalError() }
 }

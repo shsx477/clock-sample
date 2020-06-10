@@ -2,7 +2,6 @@ import UIKit
 
 class XzStopwatchVC: UIViewController {
     private let btnMargin: CGFloat = 20
-    
     private let clockPageVC = XzClockPageVC()
     private let buttonView = UIView()
     private let lapTableVC = XzLapTableVC()
@@ -143,6 +142,7 @@ extension XzStopwatchVC {
             let clockPageView = self.clockPageVC.view {
             
             let space: CGFloat = 20.0
+            
             let safeArea = super.view.safeAreaLayoutGuide
             containerView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -192,7 +192,7 @@ extension XzStopwatchVC {
                 clockPageView.topAnchor.constraint(equalTo: containerView.topAnchor),
                 clockPageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 clockPageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                clockPageView.bottomAnchor.constraint(equalTo: btnView.centerYAnchor),
+                clockPageView.bottomAnchor.constraint(equalTo: btnView.centerYAnchor, constant: XzClockPageVC.pageControlHeight / 2),
             ])
         }
     }
