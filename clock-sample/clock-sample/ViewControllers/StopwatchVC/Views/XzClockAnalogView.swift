@@ -81,62 +81,134 @@ public class XzClockAnalogView: UIView {
     }
     
     private static func setTextMinutes(layer: CALayer, drawRect: CGRect, indexHeight: CGFloat) {
-        let centerX = drawRect.width / 2
+        let centerX = drawRect.minX + drawRect.width / 2
         let centerY = drawRect.minY + drawRect.width / 2
-        let widthSize: CGFloat = 80
-        let heightSize: CGFloat = 80
+        let radius = (drawRect.width / 2) - indexHeight
+        let xDegree60 = radius * cos(SELF.toRadian(angle: 60))
+        let yDegree60 = radius * sin(SELF.toRadian(angle: 60))
+        let xDegree30 = radius * cos(SELF.toRadian(angle: 30))
+        let yDegree30 = radius * sin(SELF.toRadian(angle: 30))
 
-//        let y0 = drawRect.minY + indexHeight
-        let y0: CGFloat = 0
-        let y1 = drawRect.minY + 45
-        let y2 = drawRect.minY + 95
-        let y3 = centerY - 20
-        let y4 = centerY + 50
-        let y5 = centerY + 107
-        let y6 = drawRect.height - indexHeight - 5 - 40
+        func addMinute60() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "60")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX - (size.width / 2) + 3.0,
+                                       y: indexHeight + 3.0,
+                                       width: size.width,
+                                       height: size.height)
+        }
         
-        let x0 = indexHeight + 3
-        let x1: CGFloat = 50
-        let x2: CGFloat = 100
-        let x3          = centerX - 15
-        let x4          = centerX + 55
-        let x5          = centerX + 110
+        func addMinute05() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "5")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX + xDegree60,
+                                     y: centerY - yDegree60,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame60 = CGRect(x: x3, y: y0, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "60", frame: frame60)
+        func addMinute10() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "10")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX + xDegree30,
+                                     y: centerY - yDegree30,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame5 = CGRect(x: x4 + 5, y: y1, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "5", frame: frame5)
-     
-        let frame10 = CGRect(x: x5, y: y2, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "10", frame: frame10)
+        func addMinute15() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "15")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: drawRect.maxX - (indexHeight + size.width) - 8.0,
+                                     y: centerY - (size.height / 2) + 3.0,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame15 = CGRect(x: drawRect.width - 60, y: y3, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "15", frame: frame15)
+        func addMinute20() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "20")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX + xDegree30,
+                                     y: centerY + yDegree30,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame20 = CGRect(x: x5, y: y4, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "20", frame: frame20)
+        func addMinute25() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "25")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX + xDegree60,
+                                     y: centerY + yDegree60,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame25 = CGRect(x: x4, y: y5, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "25", frame: frame25)
+        func addMinute30() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "30")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX - (size.width / 2) - 3.0,
+                                     y: drawRect.maxY - (indexHeight + size.height) - 3.0,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame30 = CGRect(x: x3, y: y6, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "30", frame: frame30)
+        func addMinute35() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "35")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX - xDegree60,
+                                     y: centerY + yDegree60,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame35 = CGRect(x: x2, y: y5, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "35", frame: frame35)
+        func addMinute40() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "40")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX - xDegree30,
+                                     y: centerY + yDegree30,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame40 = CGRect(x: x1, y: y4, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "40", frame: frame40)
+        func addMinute45() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "45")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: indexHeight + 8.0,
+                                     y: centerY - (size.height / 2) - 3.0,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame45 = CGRect(x: x0, y: y3, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "45", frame: frame45)
+        func addMinute50() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "50")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX - xDegree30,
+                                     y: centerY - yDegree30,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame50 = CGRect(x: x1, y: y2, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "50", frame: frame50)
+        func addMinute55() {
+            let textLayer = SELF.addCATextLayer(layer: layer, text: "55")
+            let size = textLayer.preferredFrameSize()
+            textLayer.frame = CGRect(x: centerX - xDegree60,
+                                     y: centerY - yDegree60,
+                                     width: size.width,
+                                     height: size.height)
+        }
         
-        let frame55 = CGRect(x: x2, y: y1, width: widthSize, height: heightSize)
-        XzClockAnalogView.addCATextLayer(layer: layer, text: "55", frame: frame55)
+        addMinute60()
+        addMinute05()
+        addMinute10()
+        addMinute15()
+        addMinute20()
+        addMinute25()
+        addMinute30()
+        addMinute35()
+        addMinute40()
+        addMinute45()
+        addMinute50()
+        addMinute55()
     }
     
     private static func setSecondHand(layer: CALayer, drawRect: CGRect, seconds: Int, handColor: UIColor) {
@@ -227,16 +299,16 @@ public class XzClockAnalogView: UIView {
     
     // MARK:- common
     
-    private static func addCATextLayer(layer: CALayer, text: String, frame: CGRect) {
+    private static func addCATextLayer(layer: CALayer, text: String) -> CATextLayer {
         let textLayer = CATextLayer()
-        textLayer.frame = frame
         textLayer.string = text
         textLayer.fontSize = 30
         textLayer.foregroundColor = UIColor.white.cgColor
         textLayer.contentsScale = UIScreen.main.scale
-        textLayer.backgroundColor = UIColor.systemBlue.cgColor
-        
+        textLayer.alignmentMode = .center
         layer.addSublayer(textLayer)
+        
+        return textLayer
     }
     
     private static func createReplicatorLayer(drawRect: CGRect, instanceCount: Int) -> CAReplicatorLayer {
@@ -258,4 +330,6 @@ public class XzClockAnalogView: UIView {
         
         return idxLayer
     }
+    
+    private static func toRadian(angle: CGFloat) -> CGFloat { angle * (CGFloat.pi / 180) }
 }
