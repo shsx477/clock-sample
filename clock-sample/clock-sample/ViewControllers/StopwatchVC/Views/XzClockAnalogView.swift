@@ -4,6 +4,9 @@ import Foundation
 public class XzClockAnalogView: UIView {
     private typealias SELF = XzClockAnalogView
     
+    private static let FONT_SIZE: CGFloat = 30.0
+    private static let SECOND_INDEX_WIDTH: CGFloat = 2.0
+    
     let orangeColor = UIColor(red: 250 / 255, green: 150 / 255, blue: 15 / 255, alpha: 1)
 //    let grayColor = UIColor(red: 61 / 255, green: 62 / 255, blue: 66 / 255, alpha: 1).cgColor
     
@@ -25,8 +28,7 @@ public class XzClockAnalogView: UIView {
         super.layer.backgroundColor = UIColor.black.cgColor
 
         let seconds = 0
-        let idxWidth: CGFloat = 2.0
-        let idxHeight: CGFloat = 10.0
+        let idxHeight: CGFloat = 15.0
         
         var drawRect = CGRect()
         
@@ -42,14 +44,14 @@ public class XzClockAnalogView: UIView {
             drawRect.size.height = rect.height
         }
         
-        SELF.setIndexSeconds(layer: super.layer, drawRect: drawRect, indexWidth: idxWidth, indexHeight: idxHeight / 2, indexColor: .gray)
-        SELF.setIndexMinutes(layer: super.layer, drawRect: drawRect, indexWidth: idxWidth, indexHeight: idxHeight, indexColor: .gray)
-        SELF.setIndexHours(layer: super.layer, drawRect: drawRect, indexWidth: idxWidth, indexHeight: idxHeight, indexColor: .white)
+        SELF.setIndexSeconds(layer: super.layer, drawRect: drawRect, indexWidth: SELF.SECOND_INDEX_WIDTH, indexHeight: idxHeight / 2, indexColor: .gray)
+        SELF.setIndexMinutes(layer: super.layer, drawRect: drawRect, indexWidth: SELF.SECOND_INDEX_WIDTH, indexHeight: idxHeight, indexColor: .gray)
+        SELF.setIndexHours(layer: super.layer, drawRect: drawRect, indexWidth: SELF.SECOND_INDEX_WIDTH, indexHeight: idxHeight, indexColor: .white)
         SELF.setTextMinutes(layer: super.layer, drawRect: drawRect, indexHeight: idxHeight)
-        SELF.setSecondHand(layer: super.layer, drawRect: drawRect, seconds: seconds, handColor: self.orangeColor)
+        SELF.setSecondHand(layer: super.layer, drawRect: drawRect, seconds: seconds, indexWidth: SELF.SECOND_INDEX_WIDTH, handColor: self.orangeColor)
         SELF.drawCenterCircle(layer: super.layer, drawRect: drawRect, fillColor: self.orangeColor)
 
-        self.displayTextLayer = SELF.setTimeText(layer: super.layer, drawRect: drawRect)
+        self.displayTextLayer = SELF.setTimeText(layer: super.layer, drawRect: drawRect, indexHeight: idxHeight)
     }
     
     
@@ -93,15 +95,15 @@ public class XzClockAnalogView: UIView {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "60")
             let size = textLayer.preferredFrameSize()
             textLayer.frame = CGRect(x: centerX - (size.width / 2) + 3.0,
-                                       y: indexHeight + 3.0,
-                                       width: size.width,
-                                       height: size.height)
+                                     y: indexHeight + 3.0,
+                                     width: size.width,
+                                     height: size.height)
         }
         
         func addMinute05() {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "5")
             let size = textLayer.preferredFrameSize()
-            textLayer.frame = CGRect(x: centerX + xDegree60,
+            textLayer.frame = CGRect(x: centerX + xDegree60 - 15.0,
                                      y: centerY - yDegree60,
                                      width: size.width,
                                      height: size.height)
@@ -110,8 +112,8 @@ public class XzClockAnalogView: UIView {
         func addMinute10() {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "10")
             let size = textLayer.preferredFrameSize()
-            textLayer.frame = CGRect(x: centerX + xDegree30,
-                                     y: centerY - yDegree30,
+            textLayer.frame = CGRect(x: centerX + xDegree30 - 35.0,
+                                     y: centerY - yDegree30 - 3.0,
                                      width: size.width,
                                      height: size.height)
         }
@@ -128,8 +130,8 @@ public class XzClockAnalogView: UIView {
         func addMinute20() {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "20")
             let size = textLayer.preferredFrameSize()
-            textLayer.frame = CGRect(x: centerX + xDegree30,
-                                     y: centerY + yDegree30,
+            textLayer.frame = CGRect(x: centerX + xDegree30 - 40.0,
+                                     y: centerY + yDegree30 - size.height + 8.0,
                                      width: size.width,
                                      height: size.height)
         }
@@ -137,8 +139,8 @@ public class XzClockAnalogView: UIView {
         func addMinute25() {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "25")
             let size = textLayer.preferredFrameSize()
-            textLayer.frame = CGRect(x: centerX + xDegree60,
-                                     y: centerY + yDegree60,
+            textLayer.frame = CGRect(x: centerX + xDegree60 - 30.0,
+                                     y: centerY + yDegree60 - size.height - 3.0,
                                      width: size.width,
                                      height: size.height)
         }
@@ -155,8 +157,8 @@ public class XzClockAnalogView: UIView {
         func addMinute35() {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "35")
             let size = textLayer.preferredFrameSize()
-            textLayer.frame = CGRect(x: centerX - xDegree60,
-                                     y: centerY + yDegree60,
+            textLayer.frame = CGRect(x: centerX - xDegree60 - 10.0,
+                                     y: centerY + yDegree60 - size.height - 5.0,
                                      width: size.width,
                                      height: size.height)
         }
@@ -165,7 +167,7 @@ public class XzClockAnalogView: UIView {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "40")
             let size = textLayer.preferredFrameSize()
             textLayer.frame = CGRect(x: centerX - xDegree30,
-                                     y: centerY + yDegree30,
+                                     y: centerY + yDegree30 - size.height + 5.0,
                                      width: size.width,
                                      height: size.height)
         }
@@ -182,8 +184,8 @@ public class XzClockAnalogView: UIView {
         func addMinute50() {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "50")
             let size = textLayer.preferredFrameSize()
-            textLayer.frame = CGRect(x: centerX - xDegree30,
-                                     y: centerY - yDegree30,
+            textLayer.frame = CGRect(x: centerX - xDegree30 + 3.0,
+                                     y: centerY - yDegree30 - 10.0,
                                      width: size.width,
                                      height: size.height)
         }
@@ -191,7 +193,7 @@ public class XzClockAnalogView: UIView {
         func addMinute55() {
             let textLayer = SELF.addCATextLayer(layer: layer, text: "55")
             let size = textLayer.preferredFrameSize()
-            textLayer.frame = CGRect(x: centerX - xDegree60,
+            textLayer.frame = CGRect(x: centerX - xDegree60 - 5.0,
                                      y: centerY - yDegree60,
                                      width: size.width,
                                      height: size.height)
@@ -211,11 +213,11 @@ public class XzClockAnalogView: UIView {
         addMinute55()
     }
     
-    private static func setSecondHand(layer: CALayer, drawRect: CGRect, seconds: Int, handColor: UIColor) {
-        let rad = CGFloat(seconds) * CGFloat.pi / 180
-        let handAddLength: CGFloat = 40
+    private static func setSecondHand(layer: CALayer, drawRect: CGRect, seconds: Int, indexWidth: CGFloat, handColor: UIColor) {
+        let rad = CGFloat(seconds) * CGFloat.pi / 180.0
+        let handAddLength: CGFloat = 35.0
         let handLength = (drawRect.width / 2.0) + handAddLength
-        let anchorPtY = 1 - (handAddLength / handLength)
+        let anchorPtY = 1.0 - (handAddLength / handLength)
         let centerX = drawRect.minX + (drawRect.width / 2.0)
         let centerY = drawRect.minY + (drawRect.height / 2.0)
         
@@ -223,11 +225,14 @@ public class XzClockAnalogView: UIView {
         handLayer.backgroundColor = handColor.cgColor
         handLayer.anchorPoint = CGPoint(x: 0.5, y: anchorPtY)
         handLayer.position = CGPoint(x: centerX, y: centerY)
-        handLayer.bounds = CGRect(x: 0, y: 0, width: 3, height: handLength)
+        handLayer.bounds = CGRect(x: 0.0,
+                                  y: 0.0,
+                                  width: indexWidth,
+                                  height: handLength)
         handLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
         layer.addSublayer(handLayer)
         
-        SELF.setSecondHandAnimation(handLayer: handLayer, rad: rad)
+//        SELF.setSecondHandAnimation(handLayer: handLayer, rad: rad)
     }
     
     private static func setSecondHandAnimation(handLayer: CALayer, rad: CGFloat) {
@@ -241,16 +246,29 @@ public class XzClockAnalogView: UIView {
         handLayer.add(secondsHandAnimation, forKey: "secondsHandAnimation")
     }
     
-    private static func setTimeText(layer: CALayer, drawRect: CGRect) -> CATextLayer {
+    private static func setTimeText(layer: CALayer, drawRect: CGRect, indexHeight: CGFloat) -> CATextLayer {
         let centerX = drawRect.minX + (drawRect.width / 2)
         let centerY = drawRect.minY + (drawRect.height / 2)
+        let radius = (drawRect.width / 2) - indexHeight
+        let yDegree60 = radius * sin(SELF.toRadian(angle: 60))
         let textLayer = CATextLayer()
         
-        textLayer.frame = CGRect(x: centerX - 43, y: centerY + 60, width: 150, height: 50)
-        textLayer.string = "00:00.00"
+        let testTextLayer = CATextLayer()
+        testTextLayer.string = "30"
+        testTextLayer.font = UIFont.monospacedDigitSystemFont(ofSize: SELF.FONT_SIZE, weight: .regular)
+        let minuteTextHeight = testTextLayer.preferredFrameSize().height
+        
+        textLayer.string = XzStopwatchVC.INIT_TIME
         textLayer.fontSize = 23
         textLayer.foregroundColor = UIColor.white.cgColor
         textLayer.contentsScale = UIScreen.main.scale
+        
+        let size = textLayer.preferredFrameSize()
+        textLayer.frame = CGRect(x: centerX - (size.width / 2),
+                                 y: centerY + yDegree60 - minuteTextHeight - size.height - 15.0,
+                                 width: size.width,
+                                 height: size.height)
+        
         layer.addSublayer(textLayer)
         
         return textLayer
@@ -302,7 +320,7 @@ public class XzClockAnalogView: UIView {
     private static func addCATextLayer(layer: CALayer, text: String) -> CATextLayer {
         let textLayer = CATextLayer()
         textLayer.string = text
-        textLayer.fontSize = 30
+        textLayer.fontSize = SELF.FONT_SIZE
         textLayer.foregroundColor = UIColor.white.cgColor
         textLayer.contentsScale = UIScreen.main.scale
         textLayer.alignmentMode = .center
@@ -317,6 +335,7 @@ public class XzClockAnalogView: UIView {
         replicatorLayer.frame =  drawRect
         replicatorLayer.instanceCount = instanceCount
         replicatorLayer.instanceTransform = CATransform3DMakeRotation(rad, 0.0, 0.0, 1.0)
+//        replicatorLayer.contentsScale = UIScreen.main.scale
         
         return replicatorLayer
     }
@@ -324,9 +343,15 @@ public class XzClockAnalogView: UIView {
     private static func createIndexLayer(drawRect: CGRect, indexWidth: CGFloat, indexHeight: CGFloat, indexColor: UIColor) -> CALayer {
         let centerX = drawRect.minX + (drawRect.width / 2)
         let idxLayer = CALayer()
-        idxLayer.frame = CGRect(x: centerX - (indexWidth / 2.0), y: 0.0, width: indexWidth, height: indexHeight)
+                
         idxLayer.backgroundColor = indexColor.cgColor
         idxLayer.contentsScale = UIScreen.main.scale
+        idxLayer.allowsEdgeAntialiasing = true
+//        idxLayer.transform = CATransform3DMakeScale(0.65, 0.65, 1)
+        idxLayer.frame = CGRect(x: centerX - indexWidth - 2.2,
+                                y: 0.0,
+                                width: indexWidth,
+                                height: indexHeight)
         
         return idxLayer
     }
