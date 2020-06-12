@@ -51,12 +51,10 @@ class XzStopwatchVC: UIViewController {
     {
         self.curState = .running
         self.btn_extra.setStateLap()
-        
-        let nowTime = Date()
-        self.curBeginTime = nowTime
-        
-        self.clockPageVC.start()
         self.lapTableVC.start()
+        
+        self.curBeginTime = Date()
+        self.clockPageVC.start()
         
         let newTimer = Timer(timeInterval: 0.01, repeats: true, block: self.timerBlock(timer:))
         self.stopwatchTimer = newTimer
@@ -110,9 +108,7 @@ extension XzStopwatchVC {
         return formatter
     }()
     
-    internal static let INIT_TIME = "00:00.00"
-    
-    
+
     internal class func toString(date: Date) -> String { XzStopwatchVC.dateFormatter.string(from: date) }
 }
 

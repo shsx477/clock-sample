@@ -4,10 +4,10 @@ class XzExtraButton: XzRoundButton {
     typealias extraCallbackType = (UIButton) -> Void
     
     private static var COLOR_EXTRA_ACTIVATED_TITLE: UIColor { UIColor.white }
-    private static var COLOR_EXTRA_ACTIVATED_BG: UIColor { ConstColor.CUSTOM_GRAY_3 }
-    private static var COLOR_EXTRA_DEACTIVATED_TITLE: UIColor { ConstColor.CUSTOM_GRAY_5 }
-    private static var COLOR_EXTRA_DEACTIVATED_BG: UIColor { ConstColor.CUSTOM_GRAY_2 }
-    private static var COLOR_EXTRA_HIGHLIGHTED_BG: UIColor { ConstColor.CUSTOM_GRAY_1 }
+    private static var COLOR_EXTRA_ACTIVATED_BG: UIColor { XzConstColor.CUSTOM_GRAY_3 }
+    private static var COLOR_EXTRA_DEACTIVATED_TITLE: UIColor { XzConstColor.CUSTOM_GRAY_5 }
+    private static var COLOR_EXTRA_DEACTIVATED_BG: UIColor { XzConstColor.CUSTOM_GRAY_2 }
+    private static var COLOR_EXTRA_HIGHLIGHTED_BG: UIColor { XzConstColor.CUSTOM_GRAY_1 }
     
     override var isHighlighted: Bool {
         didSet {

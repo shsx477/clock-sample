@@ -2,7 +2,7 @@ import UIKit
 
 class XzClockAnalogVC: UIViewController {
 
-    private let analogClockView = XzClockAnalogView()
+    private var analogClockView = XzClockAnalogView()
     
     
     init() {
@@ -29,17 +29,13 @@ class XzClockAnalogVC: UIViewController {
     }
     
     
-    internal func start() {
-        
-    }
+    internal func start(seconds: Int = 0) { self.analogClockView.start(seconds: seconds) }
     
-    internal func stop() {
-        
-    }
+    internal func stop() { self.analogClockView.stop() }
     
-    internal func reset() {
-        
-    }
+    internal func reset() { self.analogClockView.reset() }
+    
+    internal func updateTime(timeText: String, elapsedSec: TimeInterval) { self.analogClockView.updateTime(timeText: timeText, elapsedSec: elapsedSec) }
     
     
     required init?(coder: NSCoder) { fatalError() }

@@ -3,8 +3,8 @@ import UIKit
 class XzLapTableVC: UITableViewController {
     
     private static var COLOR_SEPARATOR: UIColor { UIColor.systemGray5 }
-    private static var COLOR_BEST_TEXT: UIColor { ConstColor.CUSTOM_GREEN_3 }
-    private static var COLOR_WORST_TEXT: UIColor { ConstColor.CUSTOM_RED_3 }
+    private static var COLOR_BEST_TEXT: UIColor { XzConstColor.CUSTOM_GREEN_3 }
+    private static var COLOR_WORST_TEXT: UIColor { XzConstColor.CUSTOM_RED_3 }
     
     private let topSeparator: UIView = {
         let separator = UIView()
@@ -26,7 +26,7 @@ class XzLapTableVC: UITableViewController {
     }
     
     
-    private func addLapTimeInfo() { self.lapTimeInfos.insert(XzLapInfo(textColor: ConstColor.COLOR_TEXT_DEFAULT), at: 0) }
+    private func addLapTimeInfo() { self.lapTimeInfos.insert(XzLapInfo(textColor: XzConstColor.COLOR_TEXT_DEFAULT), at: 0) }
     
     private func calcNowSec(elapsedSec: TimeInterval) -> TimeInterval { elapsedSec - self.secOffset }
     
@@ -56,13 +56,13 @@ class XzLapTableVC: UITableViewController {
             let lapInfoWorst = self.lapTimeInfos.reduce(firstItem) { $0.lapTime > $1.lapTime ? $0 : $1 }
             
             if lapInfoBest !== self.curLapInfoBest {
-                self.curLapInfoBest?.textColor = ConstColor.COLOR_TEXT_DEFAULT
+                self.curLapInfoBest?.textColor = XzConstColor.COLOR_TEXT_DEFAULT
                 lapInfoBest.textColor = XzLapTableVC.COLOR_BEST_TEXT
                 self.curLapInfoBest = lapInfoBest
             }
             
             if lapInfoWorst !== self.curLapInfoWorst {
-                self.curLapInfoWorst?.textColor = ConstColor.COLOR_TEXT_DEFAULT
+                self.curLapInfoWorst?.textColor = XzConstColor.COLOR_TEXT_DEFAULT
                 lapInfoWorst.textColor = XzLapTableVC.COLOR_WORST_TEXT
                 self.curLapInfoWorst = lapInfoWorst
             }

@@ -3,14 +3,12 @@ import UIKit
 class XzClockPageVC: UIPageViewController {
     internal static let pageControlHeight: CGFloat = 37.0
     
-    private let digitalClockVC: XzClockDigitalVC
-    private let analogClockVC: XzClockAnalogVC
+    private let digitalClockVC = XzClockDigitalVC()
+    private let analogClockVC = XzClockAnalogVC()
     private let clockPageVCs: [UIViewController]
     
     
     init() {
-        self.analogClockVC = XzClockAnalogVC()
-        self.digitalClockVC = XzClockDigitalVC()
         self.clockPageVCs = [self.digitalClockVC, self.analogClockVC]
         
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
@@ -27,20 +25,20 @@ class XzClockPageVC: UIPageViewController {
     }
     
     
-    internal func start() {
-        
-    }
+    internal func start() { self.analogClockVC.start() }
     
-    internal func stop() {
-        
-    }
+    internal func stop() { self.analogClockVC.stop() }
     
     internal func reset() {
         self.digitalClockVC.reset()
+        self.analogClockVC.reset()
     }
     
     internal func updateTime(elapsedSec: TimeInterval) {
-        self.digitalClockVC.updateTime(elapsedSec: elapsedSec)
+        let timeText = XzStopwatchVC.toString(date: Date(timeIntervalSince1970: elapsedSec))
+        
+        self.digitalClockVC.updateTime(timeText: timeText)
+        self.analogClockVC.updateTime(timeText: timeText, elapsedSec: elapsedSec)
     }
     
     

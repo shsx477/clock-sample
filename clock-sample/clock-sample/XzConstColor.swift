@@ -1,6 +1,6 @@
 import UIKit
 
-class ConstColor {
+class XzConstColor {
     static let CUSTOM_GREEN_1 = UIColor(red: 5 / 255, green: 22 / 255, blue: 9 / 255, alpha: 1)
     static let CUSTOM_GREEN_2 = UIColor(red: 9 / 255, green: 42 / 255, blue: 17 / 255, alpha: 1)
     static let CUSTOM_GREEN_3 = UIColor(red: 61 / 255, green: 206 / 255, blue: 89 / 255, alpha: 1)
