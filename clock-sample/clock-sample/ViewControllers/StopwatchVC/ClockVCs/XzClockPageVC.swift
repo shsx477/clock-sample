@@ -25,9 +25,9 @@ class XzClockPageVC: UIPageViewController {
     }
     
     
-    internal func start() { self.analogClockVC.start() }
+    internal func start(seconds: TimeInterval) { self.analogClockVC.start(seconds: seconds) }
     
-    internal func stop() { self.analogClockVC.stop() }
+    internal func stop(seconds: TimeInterval) { self.analogClockVC.stop(seconds: seconds) }
     
     internal func reset() {
         self.digitalClockVC.reset()
@@ -35,11 +35,13 @@ class XzClockPageVC: UIPageViewController {
     }
     
     internal func updateTime(elapsedSec: TimeInterval) {
-        let timeText = XzStopwatchVC.toString(date: Date(timeIntervalSince1970: elapsedSec))
+        let elapsedSecText = XzClockUtils.toString(date: Date(timeIntervalSince1970: elapsedSec))
         
-        self.digitalClockVC.updateTime(timeText: timeText)
-        self.analogClockVC.updateTime(timeText: timeText, elapsedSec: elapsedSec)
+        self.digitalClockVC.updateTime(elapsedSecText: elapsedSecText)
+        self.analogClockVC.updateTime(elapsedSec: elapsedSec, elapsedSecText: elapsedSecText)
     }
+    
+    internal func lap() { self.analogClockVC.lap() }
     
     
     required init?(coder: NSCoder) { fatalError() }

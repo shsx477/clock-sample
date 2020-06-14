@@ -9,7 +9,7 @@ class XzClockDigitalVC: UIViewController {
         super.viewDidLoad()
         
         let lb = self.lb_clock
-        lb.text = XzConst.STOPWATCH_INIT_TIME
+        lb.text = XzClockConst.STOPWATCH_INIT_TIME
         lb.textColor = .white
         lb.textAlignment = .center
         lb.adjustsFontSizeToFitWidth = true
@@ -28,11 +28,11 @@ class XzClockDigitalVC: UIViewController {
     }
     
     
-    internal func updateTime(timeText: String) {
-        self.lb_clock.text = timeText
+    internal func updateTime(elapsedSecText: String) {
+        self.lb_clock.text = elapsedSecText
     }
 
     internal func reset() {
-        self.lb_clock.text = XzConst.STOPWATCH_INIT_TIME
+        self.lb_clock.text = XzClockConst.STOPWATCH_INIT_TIME
     }
 }

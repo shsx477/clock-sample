@@ -8,12 +8,11 @@ class XzStopwatchVC: UIViewController {
     private let btn_trigger = XzTriggerButton()
     private let btn_extra = XzExtraButton()
     
-    
     private var curState = state.reset
     private var stopwatchTimer: Timer?
     private var curBeginTime: Date?
-    private var oldElapsedSec = 0.0     // 마지막 경과초 (마지막에 중단했을 때 초)
-    private var nowElapsedSec = 0.0     // 현재 실시간 초
+    private var oldElapsedSec: TimeInterval = 0.0     // 마지막 경과초 (마지막에 중단했을 때 초)
+    private var nowElapsedSec: TimeInterval = 0.0     // 현재 실시간 초
     
     
     init() {
@@ -54,9 +53,9 @@ class XzStopwatchVC: UIViewController {
         self.lapTableVC.start()
         
         self.curBeginTime = Date()
-        self.clockPageVC.start()
+        self.clockPageVC.start(seconds: self.oldElapsedSec)
         
-        let newTimer = Timer(timeInterval: 0.01, repeats: true, block: self.timerBlock(timer:))
+        let newTimer = Timer(timeInterval: 0.03, repeats: true, block: self.timerBlock(timer:))
         self.stopwatchTimer = newTimer
         RunLoop.current.add(newTimer, forMode: .common)
     }
@@ -67,7 +66,7 @@ class XzStopwatchVC: UIViewController {
         self.stopwatchTimer = nil
         self.oldElapsedSec = self.nowElapsedSec
         
-        self.clockPageVC.stop()
+        self.clockPageVC.stop(seconds: self.nowElapsedSec)
         
         self.curState = .paused
         self.btn_extra.setStatePaused()
@@ -75,6 +74,7 @@ class XzStopwatchVC: UIViewController {
     
     private func doLap(_ sender: UIButton) {
         self.lapTableVC.lap(elapsedSec: self.nowElapsedSec)
+        self.clockPageVC.lap()
     }
     
     private func doReset(_ sender: UIButton) {
@@ -97,19 +97,6 @@ class XzStopwatchVC: UIViewController {
     }
     
     required init?(coder: NSCoder) { fatalError() }
-}
-
-// MARK:- Static
-extension XzStopwatchVC {
-    
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "mm:ss.SS"
-        return formatter
-    }()
-    
-
-    internal class func toString(date: Date) -> String { XzStopwatchVC.dateFormatter.string(from: date) }
 }
 
 // MARK:- UI

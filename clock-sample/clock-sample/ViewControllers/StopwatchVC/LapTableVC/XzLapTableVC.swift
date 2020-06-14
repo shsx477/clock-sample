@@ -76,7 +76,7 @@ class XzLapTableVC: UITableViewController {
         let nowSec = self.calcNowSec(elapsedSec: elapsedSec)
         
         let nowTime = Date(timeIntervalSince1970: nowSec)
-        self.lb_top?.text = XzStopwatchVC.toString(date: nowTime)
+        self.lb_top?.text = XzClockUtils.toString(date: nowTime)
     }
     
     // MARK:- delegate
@@ -94,7 +94,7 @@ class XzLapTableVC: UITableViewController {
             lbTitle.textColor = lapInfo.textColor
         }
         
-        cell.lb_lapTime.text = XzStopwatchVC.toString(date: lapInfo.lapTime)
+        cell.lb_lapTime.text = XzClockUtils.toString(date: lapInfo.lapTime)
         cell.lb_lapTime.textColor = lapInfo.textColor
         
         if indexPath.row == 0 {

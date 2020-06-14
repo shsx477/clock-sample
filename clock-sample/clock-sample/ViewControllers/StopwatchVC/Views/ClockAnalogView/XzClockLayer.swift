@@ -1,11 +1,6 @@
 import UIKit
 
 final class XzClockLayer: CALayer {
-    
-    private let secondIndexCount = XzConst.SECONDS_PER_MINUTE * 4     // 1분 간격에 4개
-    private let secondHandColor = UIColor(red: 250 / 255, green: 150 / 255, blue: 15 / 255, alpha: 1)
-    private let TimeTextFontSize: CGFloat = 23.0
-    
     private let size: CGFloat
     private let indexWidth: CGFloat
     private let indexHeight: CGFloat
@@ -19,6 +14,8 @@ final class XzClockLayer: CALayer {
     
     private var realTimeTextLayer: CATextLayer!
     private var secondHandLayer: CALayer!
+    private var lapSecondHandLayer: CALayer!
+    private var minuteClockLayer: XzMinuteClockLayer!
     
     
     init(size: CGFloat, indexWidth: CGFloat, indexHeight: CGFloat, indexColor: UIColor, minuteFontSize: CGFloat) {
@@ -41,70 +38,98 @@ final class XzClockLayer: CALayer {
         super.frame.size.height = size
         
         
-        self.setIndexSeconds()
-        self.setIndexMinutes()
-        self.setIndexHours()
+        self.setIndexMilliSecondsBy250()
+        self.setIndexSecondsBy1()
+        self.setIndexSecondsBy5()
         self.setMinuteTexts()
         
+        self.minuteClockLayer = self.setMinuteClockLayer()
         self.realTimeTextLayer = self.setRealTimeText()
-        self.secondHandLayer = self.setSecondHand()
+        
+        self.secondHandLayer = self.createSecondHand(handColor: XzClockConst.SECOND_HAND_COLOR)
+        super.addSublayer(self.secondHandLayer)
+        
+        self.lapSecondHandLayer = self.createSecondHand(handColor: UIColor.systemBlue.cgColor)
+        self.lapSecondHandLayer.isHidden = true
+        super.addSublayer(self.lapSecondHandLayer)
+        
         self.setCenterCircle()
     }
     
     
-    internal func pause() {
-        let pausedTime = super.convertTime(CACurrentMediaTime(), from: nil)
-        super.speed = 0.0
-        super.timeOffset = pausedTime
+    // MARK:- internal methos
+    internal func start(seconds: TimeInterval) {
+        XzClockUtils.setSecondHandAnimation(handLayer: self.secondHandLayer,
+                                            seconds: seconds,
+                                            duration: XzClockConst.SECONDS_PER_MINUTE,
+                                            key: "secondsHandAnimation")
+        self.minuteClockLayer.start(seconds: seconds)
     }
     
-    internal func resume() {
-        let pausedTime = super.timeOffset
-        super.speed = 1.0
-        super.timeOffset = 0.0
-        super.beginTime = 0.0
+    internal func stop(seconds: TimeInterval) {
+        let rad = XzUtils.secondsToRadian(seconds: seconds)
         
-        let timeSincePause = super.convertTime(CACurrentMediaTime(), from: nil) - pausedTime
-        super.beginTime = timeSincePause
+        XzClockUtils.pauseAnimation(layer: self)
+        self.secondHandLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
+        self.secondHandLayer.removeAllAnimations()
+        XzClockUtils.resumeAnimation(layer: self)
     }
     
-    internal func start(seconds: Int = 0) {
-        XzClockLayer.setSecondHandAnimation(handLayer: self.secondHandLayer, seconds: seconds)
-    }
-
     internal func reset() {
         self.secondHandLayer.removeAllAnimations()
-        self.resume()
+        XzClockUtils.resumeAnimation(layer: self)
+        self.lapSecondHandLayer.isHidden = true
         
-        self.realTimeTextLayer.string = XzConst.STOPWATCH_INIT_TIME
-    }
-
-    internal func updateTime(timeText: String) {
-        self.realTimeTextLayer.string = timeText
+        self.realTimeTextLayer.string = XzClockConst.STOPWATCH_INIT_TIME
+        
+        self.minuteClockLayer.reset()
     }
     
+    internal func pause(elapsedSec: TimeInterval) {
+        let rad = XzUtils.secondsToRadian(seconds: elapsedSec)
+        
+        XzClockUtils.pauseAnimation(layer: self)
+        self.secondHandLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
+        self.secondHandLayer.removeAllAnimations()
+    }
     
-    private func setIndexSeconds() {
-        let replicatorLayer = XzClockLayer.createReplicatorLayer(size: self.size, instanceCount: self.secondIndexCount)
+    internal func updateTime(elapsedSecText: String) {
+        self.realTimeTextLayer.string = elapsedSecText
+    }
+    
+    internal func lap(seconds: TimeInterval = 0) {
+        self.lapSecondHandLayer.isHidden = false
+        self.lapSecondHandLayer.removeAllAnimations()
+        
+        XzClockUtils.setSecondHandAnimation(handLayer: self.lapSecondHandLayer,
+                                            seconds: seconds,
+                                            duration: XzClockConst.SECONDS_PER_MINUTE,
+                                            key: "lapSecondsHandAnimation")
+    }
+    
+    // MARK:- private methos
+    private func setIndexMilliSecondsBy250() {
+        let indexCount = XzClockConst.SECONDS_PER_MINUTE * 4     // 1초에 4개
+        let replicatorLayer = XzClockUtils.createReplicatorLayer(size: self.size, instanceCount: indexCount)
         super.addSublayer(replicatorLayer)
         
-        let idxLayer = XzClockLayer.createIndexLayer(size: self.size, indexWidth: self.indexWidth, indexHeight: self.indexHeight / 2, indexColor: .systemGray3)
+        let idxLayer = XzClockUtils.createIndexLayer(size: self.size, indexWidth: self.indexWidth, indexHeight: self.indexHeight / 2, indexColor: .systemGray3)
         replicatorLayer.addSublayer(idxLayer)
     }
     
-    private func setIndexMinutes() {
-        let replicatorLayer = XzClockLayer.createReplicatorLayer(size: self.size, instanceCount: XzConst.MINUTES_PER_HOUR)
+    private func setIndexSecondsBy1() {
+        let replicatorLayer = XzClockUtils.createReplicatorLayer(size: self.size, instanceCount: XzClockConst.MINUTES_PER_HOUR)
         super.addSublayer(replicatorLayer)
 
-        let idxLayer = XzClockLayer.createIndexLayer(size: self.size, indexWidth: self.indexWidth, indexHeight: self.indexHeight, indexColor: .systemGray3)
+        let idxLayer = XzClockUtils.createIndexLayer(size: self.size, indexWidth: self.indexWidth, indexHeight: self.indexHeight, indexColor: .systemGray3)
         replicatorLayer.addSublayer(idxLayer)
     }
     
-    private func setIndexHours() {
-        let replicatorLayer = XzClockLayer.createReplicatorLayer(size: self.size, instanceCount: XzConst.HOURS_PER_DAY)
+    private func setIndexSecondsBy5() {
+        let replicatorLayer = XzClockUtils.createReplicatorLayer(size: self.size, instanceCount: XzClockConst.HOURS_PER_DAY)
         super.addSublayer(replicatorLayer)
 
-        let idxLayer = XzClockLayer.createIndexLayer(size: self.size, indexWidth: self.indexWidth, indexHeight: self.indexHeight, indexColor: .white)
+        let idxLayer = XzClockUtils.createIndexLayer(size: self.size, indexWidth: self.indexWidth, indexHeight: self.indexHeight, indexColor: .white)
         replicatorLayer.addSublayer(idxLayer)
     }
     
@@ -123,23 +148,22 @@ final class XzClockLayer: CALayer {
         self.addMinuteText60()
     }
     
-    private func setSecondHand() -> CALayer {
+    private func createSecondHand(handColor: CGColor) -> CALayer {
         let handAddLength: CGFloat = 35.0
         let handLength = (self.size / 2.0) + handAddLength
         let anchorPtY = 1.0 - (handAddLength / handLength)
-        let centerX = self.size / 2
-        let centerY = self.size / 2
-        
         let handLayer = CALayer()
-        handLayer.backgroundColor = self.secondHandColor.cgColor
+        
+        handLayer.backgroundColor = handColor
         handLayer.anchorPoint = CGPoint(x: 0.5, y: anchorPtY)
-        handLayer.position = CGPoint(x: centerX, y: centerY)
+        handLayer.position = CGPoint(x: self.centerX, y: self.centerY)
         handLayer.bounds = CGRect(x: 0.0,
                                   y: 0.0,
-                                  width: self.indexWidth,
+                                  width: XzClockConst.SECOND_HAND_WIDTH,
                                   height: handLength)
         handLayer.transform = CATransform3DMakeRotation(0.0, 0.0, 0.0, 10.0)
-        super.addSublayer(handLayer)
+        handLayer.contentsScale = UIScreen.main.scale
+        handLayer.allowsEdgeAntialiasing = true
         
         return handLayer
     }
@@ -152,8 +176,8 @@ final class XzClockLayer: CALayer {
         testTextLayer.font = UIFont.monospacedDigitSystemFont(ofSize: self.minuteFontSize, weight: .regular)
         let minuteTextHeight = testTextLayer.preferredFrameSize().height
         
-        textLayer.string = XzConst.STOPWATCH_INIT_TIME
-        textLayer.fontSize = self.TimeTextFontSize
+        textLayer.string = XzClockConst.STOPWATCH_INIT_TIME
+        textLayer.fontSize = XzClockConst.TIME_TEXT_FONTSIZE
         textLayer.foregroundColor = UIColor.white.cgColor
         textLayer.contentsScale = UIScreen.main.scale
         
@@ -173,82 +197,41 @@ final class XzClockLayer: CALayer {
         let outsideCircleXY = self.centerX - (outsideCircleSize / 2.0)
         let insideCircleSize = outsideCircleSize / 2.0
         let insideCircleXY = self.centerX - (insideCircleSize / 2.0)
-        
         let outsideCircleLayer = CAShapeLayer()
+        let insideCircleLayer = CAShapeLayer()
+        
         outsideCircleLayer.frame = CGRect(x: outsideCircleXY, y: outsideCircleXY, width: outsideCircleSize, height: outsideCircleSize)
         outsideCircleLayer.path = UIBezierPath(ovalIn: CGRect(x: 0.0, y: 0.0, width: outsideCircleSize, height: outsideCircleSize)).cgPath
-        outsideCircleLayer.fillColor = self.secondHandColor.cgColor
+        outsideCircleLayer.fillColor = XzClockConst.SECOND_HAND_COLOR
         super.addSublayer(outsideCircleLayer)
         
-        let insideCircleLayer = CAShapeLayer()
         insideCircleLayer.frame = CGRect(x: insideCircleXY, y: insideCircleXY, width: insideCircleSize, height: insideCircleSize)
         insideCircleLayer.path = UIBezierPath(ovalIn: CGRect(x: 0.0, y: 0.0, width: insideCircleSize, height: insideCircleSize)).cgPath
         insideCircleLayer.fillColor = UIColor.black.cgColor
         super.addSublayer(insideCircleLayer)
     }
     
+    private func setMinuteClockLayer() -> XzMinuteClockLayer {
+        let size = (self.size / 2) * (2.0 / 3.7)
+        let clockLayer = XzMinuteClockLayer(size: size, indexWidth: self.indexWidth / 1.5, indexHeight: self.indexHeight / 2, indexColor: .white, minuteFontSize: 15.0)
+        
+        clockLayer.frame = CGRect(x: (self.size / 2) - (size / 2),
+                                  y: size / 2 + 15.0,
+                                  width: size,
+                                  height: size)
+        super.addSublayer(clockLayer)
+        
+        return clockLayer
+    }
+    
     
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK:- static functions
-extension XzClockLayer {
-    private static func addCATextLayer(layer: CALayer, text: String, fontSize: CGFloat) -> CATextLayer {
-        let textLayer = CATextLayer()
-        textLayer.string = text
-        textLayer.fontSize = fontSize
-        textLayer.foregroundColor = UIColor.white.cgColor
-        textLayer.contentsScale = UIScreen.main.scale
-        textLayer.alignmentMode = .center
-        layer.addSublayer(textLayer)
-        
-        return textLayer
-    }
-    
-    private static func createReplicatorLayer(size: CGFloat, instanceCount: Int) -> CAReplicatorLayer {
-        let rad = CGFloat.pi * 2.0 / CGFloat(instanceCount)
-        let replicatorLayer = CAReplicatorLayer()
-        
-        replicatorLayer.frame =  CGRect(x: 0.0, y: 0.0, width: size, height: size)
-        replicatorLayer.instanceCount = instanceCount
-        replicatorLayer.instanceTransform = CATransform3DMakeRotation(rad, 0.0, 0.0, 1.0)
-        
-        return replicatorLayer
-    }
-    
-    private static func createIndexLayer(size: CGFloat, indexWidth: CGFloat, indexHeight: CGFloat, indexColor: UIColor) -> CALayer {
-        let centerX = size / 2
-        let idxLayer = CALayer()
-                
-        idxLayer.backgroundColor = indexColor.cgColor
-        idxLayer.contentsScale = UIScreen.main.scale
-        idxLayer.allowsEdgeAntialiasing = true
-        idxLayer.frame = CGRect(x: centerX - indexWidth / 2,
-                                y: 0.0,
-                                width: indexWidth,
-                                height: indexHeight)
-        
-        return idxLayer
-    }
-    
-    private static func setSecondHandAnimation(handLayer: CALayer, seconds: Int) {
-        let rad = XzUtils.secondsToRadian(seconds: seconds)
-        let secondsHandAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        
-        secondsHandAnimation.repeatCount = Float.infinity
-        secondsHandAnimation.duration = CFTimeInterval(XzConst.SECONDS_PER_MINUTE)
-        secondsHandAnimation.isRemovedOnCompletion = false
-        secondsHandAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-        secondsHandAnimation.fromValue = rad
-        secondsHandAnimation.byValue = Double.pi * 2
-        handLayer.add(secondsHandAnimation, forKey: "secondsHandAnimation")
-    }
-}
-
-// MARK:- creating minute text methos
+// MARK:- creat minute text methods
 extension XzClockLayer {
     private func addMinuteText05() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "5", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "5", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.centerX + self.posAngle60.x - 15.0,
                                  y: self.centerY - self.posAngle60.y,
@@ -257,7 +240,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText10() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "10", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "10", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: centerX + self.posAngle30.x - 35.0,
                                  y: centerY - self.posAngle30.y - 3.0,
@@ -266,7 +249,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText15() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "15", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "15", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.size - (self.indexHeight + preferredSize.width) - 8.0,
                                  y: self.centerY - (preferredSize.height / 2) + 3.0,
@@ -275,7 +258,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText20() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "20", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "20", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.centerX + self.posAngle30.x - 40.0,
                                  y: self.centerY + self.posAngle30.y - preferredSize.height + 8.0,
@@ -284,7 +267,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText25() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "25", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "25", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.centerX + self.posAngle60.x - 30.0,
                                  y: self.centerY + self.posAngle60.y - preferredSize.height - 3.0,
@@ -293,7 +276,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText30() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "30", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "30", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.centerX - (preferredSize.width / 2) - 3.0,
                                  y: self.size - (self.indexHeight + preferredSize.height) - 3.0,
@@ -302,7 +285,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText35() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "35", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "35", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.centerX - self.posAngle60.x - 10.0,
                                  y: self.centerY + self.posAngle60.y - preferredSize.height - 5.0,
@@ -311,7 +294,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText40() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "40", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "40", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.centerX - self.posAngle30.x,
                                  y: self.centerY + self.posAngle30.y - preferredSize.height + 5.0,
@@ -320,7 +303,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText45() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "45", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "45", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.indexHeight + 8.0,
                                  y: self.centerY - (preferredSize.height / 2) - 3.0,
@@ -329,7 +312,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText50() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "50", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "50", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: self.centerX - self.posAngle30.x + 3.0,
                                  y: self.centerY - self.posAngle30.y - 10.0,
@@ -338,7 +321,7 @@ extension XzClockLayer {
     }
     
     private func addMinuteText55() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "55", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "55", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
         textLayer.frame = CGRect(x: centerX - self.posAngle60.x - 5.0,
                                  y: centerY - self.posAngle60.y,
@@ -347,9 +330,9 @@ extension XzClockLayer {
     }
     
     private func addMinuteText60() {
-        let textLayer = XzClockLayer.addCATextLayer(layer: self, text: "60", fontSize: self.minuteFontSize)
+        let textLayer = XzClockUtils.addCATextLayer(layer: self, text: "60", fontSize: self.minuteFontSize)
         let preferredSize = textLayer.preferredFrameSize()
-        textLayer.frame = CGRect(x: self.centerX - (preferredSize.width / 2) + 3.0,
+        textLayer.frame = CGRect(x: self.centerX - (preferredSize.width / 2),
                                  y: self.indexHeight + 3.0,
                                  width: preferredSize.width,
                                  height: preferredSize.height)
