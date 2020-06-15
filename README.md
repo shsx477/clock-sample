@@ -1,6 +1,7 @@
 # clock-sample
 ### 아이폰 시계앱의 스톱워치 기능
 
+##### (시뮬레이터로 실행시 아날로그 시계의 초침 인덱스가 흰색으로 보임. 폰에서 실행시 회색으로 나타남)
 <img src="clock-image-1.png" width="40%"/><img src="clock-image-2.png" width="40%" hspace="10"/>
 
 결함 시나리오 수정
