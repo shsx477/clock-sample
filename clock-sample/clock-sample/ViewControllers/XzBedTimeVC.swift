@@ -1,6 +1,6 @@
 import UIKit
 
-class XzBedTimeVC: UIViewController {
+class XzBedTimeVC: UIViewController, XzMainTabChild {
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -10,5 +10,9 @@ class XzBedTimeVC: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    func applicationWillTerminated() {
+        
     }
 }

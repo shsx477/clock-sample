@@ -5,90 +5,88 @@ public class XzClockAnalogView: UIView {
     private var isDrawed = false
     private var isPaused = true
     private var clockLayer: XzClockLayer?
-    private var lastElapsedSec: TimeInterval?
-    private var lastElapsedSecText: String?
-    private var lastLappedTime: Date?
-    private var lastStoppedTime: Date?
+    private var lastElapsedTime: TimeInterval?
+    private var lastElapsedTimeText: String?
+    private var lastLapTime: TimeInterval?
     
     
-    internal func start(seconds: TimeInterval) {
-        self.clockLayer?.start(seconds: seconds)
+    internal func start(elapsedTime: TimeInterval, lapTime: TimeInterval? = nil) {
+        self.clockLayer?.start(elapsedTime: elapsedTime)
 
+        if let tempLapTime = lapTime {
+            self.clockLayer?.startLap(lapTime: tempLapTime)
+        }
+        
         self.isPaused = false
     }
     
-    internal func stop(seconds: TimeInterval) {
-        self.clockLayer?.stop(seconds: seconds)
-        
+    internal func stop(elapsedTime: TimeInterval, lapTime: TimeInterval? = nil) {
+        self.clockLayer?.stop(elapsedTime: elapsedTime, lapTime: lapTime)
         self.isPaused = true
-        self.lastStoppedTime = Date()
     }
     
     internal func reset() {
         self.clockLayer?.reset()
         self.isPaused = true
-        self.lastElapsedSec = nil
-        self.lastElapsedSecText = nil
-        self.lastLappedTime = nil
-        self.lastStoppedTime = nil
+        self.lastElapsedTime = nil
+        self.lastElapsedTimeText = nil
     }
     
-    internal func updateTime(elapsedSec: TimeInterval, elapsedSecText: String) {
-        self.clockLayer?.updateTime(elapsedSecText: elapsedSecText)
-        self.lastElapsedSec = elapsedSec
-        self.lastElapsedSecText = elapsedSecText
+    internal func updateTime(elapsedTime: TimeInterval, elapsedTimeText: String, lapTime: TimeInterval? = nil) {
+        self.clockLayer?.updateTime(elapsedTimeText: elapsedTimeText)
+        
+        self.lastElapsedTime = elapsedTime
+        self.lastElapsedTimeText = elapsedTimeText
+        self.lastLapTime = lapTime
     }
     
     internal func lap() {
-        self.clockLayer?.lap()
-        self.lastLappedTime = Date()
+        self.clockLayer?.startLap(lapTime: 0)
     }
     
     
     private func setClock(rect: CGRect) {
         super.layer.backgroundColor = UIColor.black.cgColor
 
-        var x: CGFloat
-        var y: CGFloat
-        var size: CGFloat
+        // create clock
+        var clockRect: CGRect
         
         if rect.height > rect.width {
-            x = rect.minX
-            y = (rect.size.height - rect.size.width) / 2
-            size = rect.width
+            clockRect = CGRect(x: rect.minX,
+                               y: (rect.size.height - rect.size.width) / 2,
+                               width: rect.width,
+                               height: rect.width)
         } else {
-            x = (rect.size.width - rect.size.height) / 2
-            y = rect.minY
-            size = rect.height
+            clockRect = CGRect(x: (rect.size.width - rect.size.height) / 2,
+                               y: rect.minY,
+                               width: rect.height,
+                               height: rect.height)
         }
         
-        let clock = XzClockLayer(size: size, indexWidth: 2.0, indexHeight: 15.0, indexColor: .white, minuteFontSize: 30.0)
-        clock.frame = CGRect(x: x, y: y, width: size, height: size)
+        let clock = XzClockLayer(size: clockRect.width, indexWidth: 2.0, indexHeight: 15.0, indexColor: .white, minuteFontSize: 30.0)
+        clock.frame = clockRect
         
         // apply current time
-        if let elapsedSec = self.lastElapsedSec,
-            let elapsedSecText = self.lastElapsedSecText {
+        if let elapsedTime = self.lastElapsedTime,
+            let elapsedTimeText = self.lastElapsedTimeText {
             
             if self.isPaused {
-                clock.pause(elapsedSec: elapsedSec)
+                clock.pause(elapsedTime: elapsedTime)
             } else {
-                clock.start(seconds: elapsedSec.truncatingRemainder(dividingBy: TimeInterval(XzClockConst.SECONDS_PER_MINUTE)))
+                // pass seconds that are not greater than 59
+                clock.start(elapsedTime: elapsedTime.truncatingRemainder(dividingBy: TimeInterval(XzClockConst.SECONDS_PER_MINUTE)))
             }
 
-            clock.updateTime(elapsedSecText: elapsedSecText)
+            clock.updateTime(elapsedTimeText: elapsedTimeText)
         }
         
         // apply lap time
-        if let lappedTime = self.lastLappedTime {
-            var seconds: TimeInterval
-            
+        if let lapTime = self.lastLapTime {
             if self.isPaused {
-                seconds = self.lastStoppedTime?.timeIntervalSince(lappedTime) ?? 0
+                clock.pauseLap(elapsedTime: lapTime)
             } else {
-                seconds = Date().timeIntervalSince(lappedTime)
+                clock.startLap(lapTime: lapTime)
             }
-            
-            clock.lap(seconds: seconds)
         }
         
         super.layer.addSublayer(clock)

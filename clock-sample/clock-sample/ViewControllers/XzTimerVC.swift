@@ -1,6 +1,6 @@
 import UIKit
 
-class XzTimerVC: UIViewController {
+class XzTimerVC: UIViewController, XzMainTabChild {
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -10,5 +10,9 @@ class XzTimerVC: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    func applicationWillTerminated() {
+        
     }
 }

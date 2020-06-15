@@ -1,6 +1,6 @@
 import UIKit
 
-class XzAlarmVC: UIViewController {
+class XzAlarmVC: UIViewController, XzMainTabChild {
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -10,5 +10,9 @@ class XzAlarmVC: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    func applicationWillTerminated() {
+        
     }
 }

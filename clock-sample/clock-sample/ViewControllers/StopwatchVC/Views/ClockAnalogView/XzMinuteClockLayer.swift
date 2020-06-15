@@ -1,6 +1,8 @@
 import UIKit
 
 final class XzMinuteClockLayer: CALayer {
+    private static let MAX_SECONDS = XzClockConst.SECONDS_PER_MINUTE * 30
+    
     private let size: CGFloat
     private let indexWidth: CGFloat
     private let indexHeight: CGFloat
@@ -43,14 +45,21 @@ final class XzMinuteClockLayer: CALayer {
     }
     
     // MARK:- internal methods
-    internal func start(seconds: TimeInterval) {
+    internal func start(elapsedTime: TimeInterval) {
         XzClockUtils.setSecondHandAnimation(handLayer: self.secondHandLayer,
-                                            seconds: seconds,
-                                            duration: XzClockConst.SECONDS_PER_MINUTE * 30,
+                                            elapsedTime: elapsedTime,
+                                            duration: XzMinuteClockLayer.MAX_SECONDS,
                                             key: "secondsHandAnimation")
     }
     
+    internal func stop(elapsedTime: TimeInterval) {
+        let rad = CGFloat(elapsedTime) * (CGFloat.pi * 2 / CGFloat(XzMinuteClockLayer.MAX_SECONDS))
+        self.secondHandLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
+        self.secondHandLayer.removeAllAnimations()
+    }
+    
     internal func reset() {
+        self.secondHandLayer.transform = CATransform3DMakeRotation(0.0, 0.0, 0.0, 10.0)
         self.secondHandLayer.removeAllAnimations()
     }
     

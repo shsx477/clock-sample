@@ -4,7 +4,12 @@ import Foundation
 class XzUtils {
     internal static func angleToRadian(angle: CGFloat) -> CGFloat { angle * (CGFloat.pi / 180) }
     
-    internal static func secondsToRadian(seconds: TimeInterval) -> CGFloat { CGFloat(seconds) * ((CGFloat.pi * 2) / (CGFloat(XzClockConst.SECONDS_PER_MINUTE))) }
+    internal static func secondsToRadianBy60Sec(seconds: TimeInterval) -> CGFloat {
+        let sec = CGFloat(seconds).truncatingRemainder(dividingBy: CGFloat(XzClockConst.SECONDS_PER_MINUTE))
+        let rad = sec * ((CGFloat.pi * 2) / CGFloat(XzClockConst.SECONDS_PER_MINUTE))
+    
+        return rad
+    }
     
     internal static func calcPointOnCircle(radius: CGFloat, angle: CGFloat) -> CGPoint {
         let resultX = radius * cos(XzUtils.angleToRadian(angle: angle))

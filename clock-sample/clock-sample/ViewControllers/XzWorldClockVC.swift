@@ -1,6 +1,6 @@
 import UIKit
 
-class XzWorldClockVC: UIViewController {
+class XzWorldClockVC: UIViewController, XzMainTabChild {
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -17,5 +17,9 @@ class XzWorldClockVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    }
+    
+    func applicationWillTerminated() {
+        
     }
 }

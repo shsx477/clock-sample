@@ -17,5 +17,12 @@ class XzMainTabController: UITabBarController {
         
         super.tabBar.barTintColor = self.tabBarBgColor
         super.tabBar.tintColor = self.tabBarSelectedColor
+        
+        super.selectedViewController = vc3
+    }
+    
+    
+    internal func applicationWillTerminate() {
+        
     }
 }

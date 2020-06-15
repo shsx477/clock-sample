@@ -1,4 +1,5 @@
 import UIKit
+import Foundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        if let mainTabVC = self.window?.rootViewController as? XzMainTabController {
+            let mainTabChildVCs = mainTabVC.viewControllers?.compactMap { $0 as? XzMainTabChild }
+            mainTabChildVCs?.forEach { $0.applicationWillTerminated() }
+        }
     }
 }
 

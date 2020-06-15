@@ -58,53 +58,65 @@ final class XzClockLayer: CALayer {
     
     
     // MARK:- internal methos
-    internal func start(seconds: TimeInterval) {
+    internal func start(elapsedTime: TimeInterval) {
         XzClockUtils.setSecondHandAnimation(handLayer: self.secondHandLayer,
-                                            seconds: seconds,
+                                            elapsedTime: elapsedTime,
                                             duration: XzClockConst.SECONDS_PER_MINUTE,
                                             key: "secondsHandAnimation")
-        self.minuteClockLayer.start(seconds: seconds)
+        self.minuteClockLayer.start(elapsedTime: elapsedTime)
     }
     
-    internal func stop(seconds: TimeInterval) {
-        let rad = XzUtils.secondsToRadian(seconds: seconds)
-        
-        XzClockUtils.pauseAnimation(layer: self)
-        self.secondHandLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
-        self.secondHandLayer.removeAllAnimations()
-        XzClockUtils.resumeAnimation(layer: self)
-    }
-    
-    internal func reset() {
-        self.secondHandLayer.removeAllAnimations()
-        XzClockUtils.resumeAnimation(layer: self)
-        self.lapSecondHandLayer.isHidden = true
-        
-        self.realTimeTextLayer.string = XzClockConst.STOPWATCH_INIT_TIME
-        
-        self.minuteClockLayer.reset()
-    }
-    
-    internal func pause(elapsedSec: TimeInterval) {
-        let rad = XzUtils.secondsToRadian(seconds: elapsedSec)
-        
-        XzClockUtils.pauseAnimation(layer: self)
-        self.secondHandLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
-        self.secondHandLayer.removeAllAnimations()
-    }
-    
-    internal func updateTime(elapsedSecText: String) {
-        self.realTimeTextLayer.string = elapsedSecText
-    }
-    
-    internal func lap(seconds: TimeInterval = 0) {
+    internal func startLap(lapTime: TimeInterval) {
         self.lapSecondHandLayer.isHidden = false
         self.lapSecondHandLayer.removeAllAnimations()
         
         XzClockUtils.setSecondHandAnimation(handLayer: self.lapSecondHandLayer,
-                                            seconds: seconds,
+                                            elapsedTime: lapTime,
                                             duration: XzClockConst.SECONDS_PER_MINUTE,
                                             key: "lapSecondsHandAnimation")
+    }
+    
+    internal func stop(elapsedTime: TimeInterval, lapTime: TimeInterval?) {
+        XzClockUtils.pauseAnimation(layer: self)
+        
+        let elapsedTimeRad = XzUtils.secondsToRadianBy60Sec(seconds: elapsedTime)
+        self.secondHandLayer.transform = CATransform3DMakeRotation(elapsedTimeRad, 0.0, 0.0, 10.0)
+        self.secondHandLayer.removeAllAnimations()
+        
+        if let tempLapTime = lapTime {
+            let lapTimeRad = XzUtils.secondsToRadianBy60Sec(seconds: tempLapTime)
+            self.lapSecondHandLayer.transform = CATransform3DMakeRotation(lapTimeRad, 0.0, 0.0, 10.0)
+            self.lapSecondHandLayer.removeAllAnimations()
+        }
+        
+        self.minuteClockLayer.stop(elapsedTime: elapsedTime)
+        
+        XzClockUtils.resumeAnimation(layer: self)
+    }
+    
+    internal func reset() {
+        self.secondHandLayer.transform = CATransform3DMakeRotation(0.0, 0.0, 0.0, 10.0)
+        self.secondHandLayer.removeAllAnimations()
+        
+        XzClockUtils.resumeAnimation(layer: self)
+        self.lapSecondHandLayer.isHidden = true
+        self.realTimeTextLayer.string = XzClockConst.STOPWATCH_INIT_TIME
+        self.minuteClockLayer.reset()
+    }
+    
+    internal func pause(elapsedTime: TimeInterval) {
+        let rad = XzUtils.secondsToRadianBy60Sec(seconds: elapsedTime)
+        self.secondHandLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
+    }
+    
+    internal func pauseLap(elapsedTime: TimeInterval) {
+        let rad = XzUtils.secondsToRadianBy60Sec(seconds: elapsedTime)
+        self.lapSecondHandLayer.transform = CATransform3DMakeRotation(rad, 0.0, 0.0, 10.0)
+        self.lapSecondHandLayer.isHidden = false
+    }
+    
+    internal func updateTime(elapsedTimeText: String) {
+        self.realTimeTextLayer.string = elapsedTimeText
     }
     
     // MARK:- private methos

@@ -1,6 +1,6 @@
 import UIKit
 
-class XzStopwatchVC: UIViewController {
+class XzStopwatchVC: UIViewController, XzMainTabChild {
     private let btnMargin: CGFloat = 20
     private let clockPageVC = XzClockPageVC()
     private let buttonView = UIView()
@@ -8,11 +8,15 @@ class XzStopwatchVC: UIViewController {
     private let btn_trigger = XzTriggerButton()
     private let btn_extra = XzExtraButton()
     
-    private var curState = state.reset
     private var stopwatchTimer: Timer?
-    private var curBeginTime: Date?
-    private var oldElapsedSec: TimeInterval = 0.0     // 마지막 경과초 (마지막에 중단했을 때 초)
-    private var nowElapsedSec: TimeInterval = 0.0     // 현재 실시간 초
+    
+    private var beginElapsedDate: Date?
+    private var nowElapsedTime: TimeInterval = 0.0
+    private var lastElapsedTime: TimeInterval = 0.0
+    
+    private var beginLapDate: Date?
+    private var nowLapTime: TimeInterval = 0.0
+    private var lastLapTime: TimeInterval = 0.0
     
     
     init() {
@@ -33,68 +37,105 @@ class XzStopwatchVC: UIViewController {
         
         self.setUI()
     }
-
     
-    private func timerBlock(timer: Timer) {
-        if let beginTime = self.curBeginTime {
-            self.nowElapsedSec = Date().timeIntervalSince(beginTime) + self.oldElapsedSec
-
-            self.clockPageVC.updateTime(elapsedSec: self.nowElapsedSec)
-            self.lapTableVC.updateTime(elapsedSec: self.nowElapsedSec)
+    
+    func applicationWillTerminated() {
+        
+    }
+    
+    
+    private func repeatTimerBlock(timer: Timer) {
+        if let beginElapsedDate = self.beginElapsedDate {
+            
+            let dateNow = Date()
+            
+            let elapsedTimeFromBegin = dateNow.timeIntervalSince(beginElapsedDate)
+            let elapsedTime = elapsedTimeFromBegin + self.lastElapsedTime
+            self.nowElapsedTime = elapsedTime
+            
+            if let beginLapDate = self.beginLapDate {
+                let lapTimeFromBegin = dateNow.timeIntervalSince(beginLapDate)
+                let lapTime = lapTimeFromBegin + self.lastLapTime
+                self.nowLapTime = lapTime
+                
+                self.clockPageVC.updateTime(elapsedTime: elapsedTime,
+                                            lapTime: lapTime)
+                
+                self.lapTableVC.updateTime(lapTime: lapTime)
+                
+            } else {
+                self.clockPageVC.updateTime(elapsedTime: elapsedTime)
+                self.lapTableVC.updateTime(lapTime: elapsedTime)
+            }
         }
     }
     
     // MARK:- actions
-    
-    private func doStartTrigger(_ sender: UIButton)
-    {
-        self.curState = .running
+    private func doStartTrigger(_ sender: UIButton) {
         self.btn_extra.setStateLap()
         self.lapTableVC.start()
         
-        self.curBeginTime = Date()
-        self.clockPageVC.start(seconds: self.oldElapsedSec)
+        let dateNow = Date()
+        self.beginElapsedDate = dateNow
         
-        let newTimer = Timer(timeInterval: 0.03, repeats: true, block: self.timerBlock(timer:))
+        // set if beginLapDate set once
+        if self.beginLapDate != nil {
+            self.beginLapDate = dateNow
+            self.clockPageVC.start(elapsedTime: self.nowElapsedTime, lapTime: self.nowLapTime)
+            
+        } else {
+            self.clockPageVC.start(elapsedTime: self.nowElapsedTime)
+        }
+        
+        let newTimer = Timer(timeInterval: 0.03, repeats: true, block: self.repeatTimerBlock)
         self.stopwatchTimer = newTimer
         RunLoop.current.add(newTimer, forMode: .common)
     }
     
-    private func doStopTrigger(_ sender: UIButton)
-    {
+    private func doStopTrigger(_ sender: UIButton) {
         self.stopwatchTimer?.invalidate()
         self.stopwatchTimer = nil
-        self.oldElapsedSec = self.nowElapsedSec
         
-        self.clockPageVC.stop(seconds: self.nowElapsedSec)
+        self.lastElapsedTime = self.nowElapsedTime
         
-        self.curState = .paused
+        if self.beginLapDate != nil {
+            self.lastLapTime = self.nowLapTime
+            self.clockPageVC.stop(elapsedTime: self.nowElapsedTime, lapTime: self.nowLapTime)
+        } else {
+            self.clockPageVC.stop(elapsedTime: self.nowElapsedTime)
+        }
+
         self.btn_extra.setStatePaused()
     }
     
     private func doLap(_ sender: UIButton) {
-        self.lapTableVC.lap(elapsedSec: self.nowElapsedSec)
+        if self.beginLapDate != nil {
+            self.lapTableVC.lap(lapTime: self.nowLapTime)
+        } else {
+            self.lapTableVC.lap(lapTime: self.nowElapsedTime)
+        }
+        
         self.clockPageVC.lap()
+        
+        self.lastLapTime = 0.0
+        self.beginLapDate = Date()
     }
     
     private func doReset(_ sender: UIButton) {
-        self.curState = .reset
         self.btn_extra.setStateReset()
         
-        self.oldElapsedSec = 0.0
-        self.nowElapsedSec = 0.0
-        self.curBeginTime = nil
+        self.nowElapsedTime = 0.0
+        self.lastElapsedTime = 0.0
+        self.beginElapsedDate = nil
+        
+        self.nowLapTime = 0.0
+        self.lastLapTime = 0.0
+        self.beginLapDate = nil
         
         self.clockPageVC.reset()
         self.lapTableVC.reset()
     }
     
-    
-    private enum state {
-        case running
-        case paused
-        case reset
-    }
     
     required init?(coder: NSCoder) { fatalError() }
 }

@@ -16,19 +16,16 @@ class XzLapTableVC: UITableViewController {
     private var lb_top: UILabel?
     private var curLapInfoBest: XzLapInfo?
     private var curLapInfoWorst: XzLapInfo?
-    private var secOffset = 0.0
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.setUI()
     }
     
     
     private func addLapTimeInfo() { self.lapTimeInfos.insert(XzLapInfo(textColor: XzConstColor.COLOR_TEXT_DEFAULT), at: 0) }
-    
-    private func calcNowSec(elapsedSec: TimeInterval) -> TimeInterval { elapsedSec - self.secOffset }
     
     
     internal func start() {
@@ -39,15 +36,12 @@ class XzLapTableVC: UITableViewController {
     }
     
     internal func reset() {
-        self.secOffset = 0.0
         self.lapTimeInfos.removeAll()
         super.tableView.reloadData()
     }
     
-    internal func lap(elapsedSec: TimeInterval) {
-        let nowSec = self.calcNowSec(elapsedSec: elapsedSec)
-        self.lapTimeInfos.first?.lapTime = Date(timeIntervalSince1970: nowSec)
-        self.secOffset = elapsedSec
+    internal func lap(lapTime: TimeInterval) {
+        self.lapTimeInfos.first?.lapTime = Date(timeIntervalSince1970: lapTime)
 
         if self.lapTimeInfos.count >= 2,
             let firstItem = self.lapTimeInfos.first {
@@ -72,11 +66,13 @@ class XzLapTableVC: UITableViewController {
         super.tableView.reloadData()
     }
     
-    internal func updateTime(elapsedSec: TimeInterval) {
-        let nowSec = self.calcNowSec(elapsedSec: elapsedSec)
-        
-        let nowTime = Date(timeIntervalSince1970: nowSec)
+    internal func updateTime(lapTime: TimeInterval) {
+        let nowTime = Date(timeIntervalSince1970: lapTime)
         self.lb_top?.text = XzClockUtils.toString(date: nowTime)
+    }
+    
+    internal func applicationWillTerminate() {
+
     }
     
     // MARK:- delegate

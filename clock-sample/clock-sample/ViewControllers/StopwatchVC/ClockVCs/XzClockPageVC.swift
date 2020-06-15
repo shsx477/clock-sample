@@ -25,20 +25,27 @@ class XzClockPageVC: UIPageViewController {
     }
     
     
-    internal func start(seconds: TimeInterval) { self.analogClockVC.start(seconds: seconds) }
+    internal func start(elapsedTime: TimeInterval, lapTime: TimeInterval? = nil) {
+        self.analogClockVC.start(elapsedTime: elapsedTime, lapTime: lapTime)
+    }
     
-    internal func stop(seconds: TimeInterval) { self.analogClockVC.stop(seconds: seconds) }
+    internal func stop(elapsedTime: TimeInterval, lapTime: TimeInterval? = nil) {
+        self.analogClockVC.stop(elapsedTime: elapsedTime,
+                                lapTime: lapTime)
+    }
     
     internal func reset() {
         self.digitalClockVC.reset()
         self.analogClockVC.reset()
     }
     
-    internal func updateTime(elapsedSec: TimeInterval) {
-        let elapsedSecText = XzClockUtils.toString(date: Date(timeIntervalSince1970: elapsedSec))
+    internal func updateTime(elapsedTime: TimeInterval, lapTime: TimeInterval? = nil) {
+        let elapsedSecText = XzClockUtils.toString(date: Date(timeIntervalSince1970: elapsedTime))
         
         self.digitalClockVC.updateTime(elapsedSecText: elapsedSecText)
-        self.analogClockVC.updateTime(elapsedSec: elapsedSec, elapsedSecText: elapsedSecText)
+        self.analogClockVC.updateTime(elapsedTime: elapsedTime,
+                                      elapsedTimeText: elapsedSecText,
+                                      lapTime: lapTime)
     }
     
     internal func lap() { self.analogClockVC.lap() }

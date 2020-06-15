@@ -5,13 +5,6 @@ class XzClockAnalogVC: UIViewController {
     private var analogClockView = XzClockAnalogView()
     
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        
-        
-    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,21 +22,22 @@ class XzClockAnalogVC: UIViewController {
     }
     
     
-    internal func start(seconds: TimeInterval) {
-        self.analogClockView.start(seconds: seconds)
+    internal func start(elapsedTime: TimeInterval, lapTime: TimeInterval? = nil) {
+        self.analogClockView.start(elapsedTime: elapsedTime, lapTime: lapTime)
     }
     
-    internal func stop(seconds: TimeInterval) { self.analogClockView.stop(seconds: seconds) }
+    internal func stop(elapsedTime: TimeInterval, lapTime: TimeInterval? = nil) {
+        self.analogClockView.stop(elapsedTime: elapsedTime,
+                                  lapTime: lapTime)
+    }
     
     internal func reset() { self.analogClockView.reset() }
     
-    internal func updateTime(elapsedSec: TimeInterval, elapsedSecText: String) {
-        self.analogClockView.updateTime(elapsedSec: elapsedSec,
-                                        elapsedSecText: elapsedSecText)
+    internal func updateTime(elapsedTime: TimeInterval, elapsedTimeText: String, lapTime: TimeInterval? = nil) {
+        self.analogClockView.updateTime(elapsedTime: elapsedTime,
+                                        elapsedTimeText: elapsedTimeText,
+                                        lapTime: lapTime)
     }
     
     internal func lap() { self.analogClockView.lap() }
-    
-    
-    required init?(coder: NSCoder) { fatalError() }
 }

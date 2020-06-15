@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A125939524950A4700DEBBB3 /* XzClockConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = A125939424950A4700DEBBB3 /* XzClockConst.swift */; };
+		A1259397249786A400DEBBB3 /* XzMainTabChild.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1259396249786A400DEBBB3 /* XzMainTabChild.swift */; };
 		A16C0F4324939D7B0067C6B6 /* XzClockLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16C0F4224939D7B0067C6B6 /* XzClockLayer.swift */; };
 		A16C0F452493AAFC0067C6B6 /* XzUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16C0F442493AAFC0067C6B6 /* XzUtils.swift */; };
 		A16FB009248BBEE30046D1DF /* XzLapTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16FB008248BBEE30046D1DF /* XzLapTableVC.swift */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		A125939424950A4700DEBBB3 /* XzClockConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzClockConst.swift; sourceTree = "<group>"; };
+		A1259396249786A400DEBBB3 /* XzMainTabChild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzMainTabChild.swift; sourceTree = "<group>"; };
 		A16C0F4224939D7B0067C6B6 /* XzClockLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzClockLayer.swift; sourceTree = "<group>"; };
 		A16C0F442493AAFC0067C6B6 /* XzUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzUtils.swift; sourceTree = "<group>"; };
 		A16FB008248BBEE30046D1DF /* XzLapTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XzLapTableVC.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				A179169E248B9F05000710F2 /* XzAlarmVC.swift */,
 				A17916A0248B9F16000710F2 /* XzBedTimeVC.swift */,
 				A17916A4248B9F35000710F2 /* XzTimerVC.swift */,
+				A1259396249786A400DEBBB3 /* XzMainTabChild.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				A16C0F452493AAFC0067C6B6 /* XzUtils.swift in Sources */,
 				A16FB017248CC5810046D1DF /* XzClockPageVC.swift in Sources */,
 				A1E1A0E6248F7806006CAB0E /* XzLapInfo.swift in Sources */,
+				A1259397249786A400DEBBB3 /* XzMainTabChild.swift in Sources */,
 				A17916A5248B9F35000710F2 /* XzTimerVC.swift in Sources */,
 				A1FE5EF8248E4DD300BC88E5 /* XzExtraButton.swift in Sources */,
 				A179166A248B9BF3000710F2 /* AppDelegate.swift in Sources */,

@@ -48,8 +48,8 @@ internal final class XzClockUtils {
         return textLayer
     }
     
-    internal static func setSecondHandAnimation(handLayer: CALayer, seconds: TimeInterval, duration: Int, key: String?, delegate: CAAnimationDelegate? = nil) {
-        let rad = CGFloat(seconds) * (CGFloat.pi * 2 / (CGFloat(duration)))
+    internal static func setSecondHandAnimation(handLayer: CALayer, elapsedTime: TimeInterval, duration: Int, key: String?) {
+        let rad = CGFloat(elapsedTime) * (CGFloat.pi * 2 / (CGFloat(duration)))
         let secondsHandAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
         
         secondsHandAnimation.repeatCount = Float.infinity
@@ -58,7 +58,6 @@ internal final class XzClockUtils {
         secondsHandAnimation.byValue = Double.pi * 2
         secondsHandAnimation.duration = CFTimeInterval(duration)
         secondsHandAnimation.fromValue = rad
-        secondsHandAnimation.delegate = delegate
         handLayer.add(secondsHandAnimation, forKey: key)
     }
     
